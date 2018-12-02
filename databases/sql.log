@@ -1,5 +1,5 @@
-timestamp: 2018-11-28T16:48:15.162000
-CREATE TABLE "web2py_session_Map_site"(
+timestamp: 2018-12-01T15:34:47.280000
+CREATE TABLE "web2py_session_map_web2py_183"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "locked" CHAR(1),
     "client_ip" CHAR(64),
@@ -9,7 +9,7 @@ CREATE TABLE "web2py_session_Map_site"(
     "session_data" BLOB
 );
 success!
-timestamp: 2018-11-28T16:48:15.233000
+timestamp: 2018-12-01T15:34:47.608000
 CREATE TABLE "auth_user"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "first_name" CHAR(128),
@@ -21,21 +21,21 @@ CREATE TABLE "auth_user"(
     "registration_id" CHAR(512)
 );
 success!
-timestamp: 2018-11-28T16:48:15.283000
+timestamp: 2018-12-01T15:34:47.849000
 CREATE TABLE "auth_group"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "role" CHAR(512),
     "description" TEXT
 );
 success!
-timestamp: 2018-11-28T16:48:15.318000
+timestamp: 2018-12-01T15:34:48.164000
 CREATE TABLE "auth_membership"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "user_id" INTEGER REFERENCES "auth_user" ("id") ON DELETE CASCADE  ,
     "group_id" INTEGER REFERENCES "auth_group" ("id") ON DELETE CASCADE  
 );
 success!
-timestamp: 2018-11-28T16:48:15.352000
+timestamp: 2018-12-01T15:34:48.420000
 CREATE TABLE "auth_permission"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "group_id" INTEGER REFERENCES "auth_group" ("id") ON DELETE CASCADE  ,
@@ -44,7 +44,7 @@ CREATE TABLE "auth_permission"(
     "record_id" INTEGER
 );
 success!
-timestamp: 2018-11-28T16:48:15.375000
+timestamp: 2018-12-01T15:34:48.677000
 CREATE TABLE "auth_event"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "time_stamp" TIMESTAMP,
@@ -54,7 +54,7 @@ CREATE TABLE "auth_event"(
     "description" TEXT
 );
 success!
-timestamp: 2018-11-28T16:48:15.391000
+timestamp: 2018-12-01T15:34:48.969000
 CREATE TABLE "auth_cas"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "user_id" INTEGER REFERENCES "auth_user" ("id") ON DELETE CASCADE  ,
@@ -64,32 +64,7 @@ CREATE TABLE "auth_cas"(
     "renew" CHAR(1)
 );
 success!
-timestamp: 2018-11-28T16:48:15.408000
-CREATE TABLE "post"(
-    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
-    "post_author" CHAR(512),
-    "post_title" CHAR(512),
-    "post_content" TEXT,
-    "post_time" TIMESTAMP
-);
-success!
-timestamp: 2018-11-28T16:48:15.423000
-CREATE TABLE "thumb"(
-    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
-    "user_email" CHAR(512),
-    "post_id" INTEGER REFERENCES "post" ("id") ON DELETE CASCADE  ,
-    "thumb_state" CHAR(512)
-);
-success!
-timestamp: 2018-11-28T16:48:15.437000
-CREATE TABLE "reply"(
-    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
-    "user_email" CHAR(512),
-    "post_id" INTEGER REFERENCES "post" ("id") ON DELETE CASCADE  ,
-    "reply_content" CHAR(512)
-);
-success!
-timestamp: 2018-11-28T16:50:01.210000
+timestamp: 2018-12-01T15:34:49.167000
 CREATE TABLE "gpx"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "gpx_author" CHAR(512),

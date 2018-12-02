@@ -2,4 +2,55 @@
 #mapid {
     height: 88%;
     width: 100%;
+    display: inline-block;
+    float:left;
+}
+
+#menuid {
+    height: 88%;
+    width: 100%;
+    display: inline-block;
+    background-color:#fff2d6;
+}
+
+#menu_button {
+    z-index: 1000;
+    position:absolute;
+    right: 0;
+
+    /*-webkit-transition: all 600ms cubic-bezier(0.165, 0.84, 0.44, 1);
+    transition:         all 600ms cubic-bezier(0.165, 0.84, 0.44, 1);*/
+
+    transition-timing-function: ease;
+    -webkit-transition: all 600ms cubic-bezier(0.165, 0.84, 0.44, 1);
+    transition:         all 600ms cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+#menu_button2 {
+    background-color:#fff2d6;
+    color:black;
+    border-radius:10px;
+    position:relative;
+    left:30px;
+}
+
+#horiz_bar {
+    background-color: black;
+    height:3px;
+    width:90%;
+    margin-top:5px;
+    margin-bottom:5px;
+    position:relative;
+    margin-left:5%;
+}
+
+#user_info_holder {
+    padding:10px;
+    padding-left:30px;
+}
+
+.big_text {
+    font-size:1.3em;
+    font-weight:bold;
+    font-family:"Verdana";
 }

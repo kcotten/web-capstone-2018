@@ -41,6 +41,54 @@
                          }},
       }).addTo(mymap);
     </script>
+    <div id="menu_button">
+      <button class="btn fa fa-ellipsis-v fa-2x" id="menu_button2"></button>
+    </div>
+  </div>
+  <div id="menuid">
+    <div class="big_text" id="user_info_holder">
+      <!-- FIXME: This should only show up when not signed in. Also need to change a href URLs-->
+      <!--
+      <span v-if="!is_logged_in"><a href="login.html">Login</a></span>
+      or
+      <span v-if="!is_logged_in"><a href="login.html">Login</a></span>
+      -->
+      <span><a href="login.html">Login</a></span>
+      or
+      <span><a href="sign_up.html">Sign Up</a></span>
+      <!--<span v-if="is_logged_in">Hello <INSERT USER NAME></span>
+    </div>
+
+    <!-- FIXME: This should only show up when logged in-->
+    <!--<div v-if="is_logged_in" id="track_menu_section">-->
+    <div id="track_menu_section">
+      <div id="horiz_bar"></div>
+      <span class="big_text" style="margin-left:30px">Your tracks</span>
+
+      <button class="btn fa fa-plus">&nbsp;&nbsp;Add Track</button>
+      <!-- FIXME: Use a v-for here to iterate through my tracks.-->
+      <div id="my_track_list">
+        <span style="padding-left:30px">Track1
+	  <button class="btn fa fa-folder-open">&nbsp;&nbsp;Load</button>
+	  <button class="btn fa fa-remove">&nbsp;&nbsp;Delete</button>
+	</span>
+      </div>
+
+      <div id="horiz_bar"></div>
+
+      <div id="favorited_track_list">
+        <span class="big_text" style="margin-left:30px">Your favorited tracks</span>
+        <div style="padding-left:10px">
+	  <i class="fa fa-star-o"></i>	
+          Track1
+	  <button class="btn fa fa-folder-open">&nbsp;&nbsp;Load</button>
+	</div>
+	<div style="padding-left:30px; font-size:.8em;">
+          Track author
+	</div>
+
+      </div>
+    </div>
   </div>
 </div>
 
