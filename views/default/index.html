@@ -17,30 +17,11 @@
   <script src="{{=URL('static', 'js/togeojson.js')}}"> </script>
 {{end}}
 
-
+<div id="vue-div" class="container">
 <div class="main_content">
   <!-- map -->
   <div id="mapid">
-    <script>
-      var mymap = L.map("mapid").setView([36.98, 237.98], 13);
-      
-      L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-        maxZoom: 18,
-        id: 'mapbox.streets',
-        accessToken: 'pk.eyJ1Ijoia2NvdHRlbiIsImEiOiJjam5qOTBxczQwd3hnM3BvM2g3a3B2amZsIn0.zmWKaRsfmBEdwlU3ejmKqQ'
-      }).addTo(mymap);
-            
-      var style = {color:'red', opacity: 1.0, fillOpacity: 1.0, weight: 2, clickable: false};
-      L.Control.FileLayerLoad.LABEL = '<i class="fa fa-folder-open"></i>';
-      L.Control.fileLayerLoad({
-          fitBounds: true,
-          layerOptions: {style: style,
-                         pointToLayer: function (data, latlng) {
-                              return L.circleMarker(latlng, {style: style});
-                         }},
-      }).addTo(mymap);
-    </script>
+    <!-- map moved to Vue -->
     <div id="menu_button">
       <button class="btn fa fa-ellipsis-v fa-2x" id="menu_button2"></button>
     </div>
@@ -100,6 +81,7 @@
       </div>
     </div>
   </div>
+</div>
 </div>
 
 <script src="{{=URL('static', 'js/default_index.js')}}"></script>

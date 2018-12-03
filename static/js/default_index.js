@@ -73,15 +73,50 @@ var app = function() {
     //self.press_menu_button = function () {
     //    
     //};
+
+    self.initMap = function() {
+        // loads map into div called mapid
+        var mymap = L.map("mapid").setView([36.98, 237.98], 13);
+
+        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            maxZoom: 18,
+            id: 'mapbox.streets',
+            accessToken: 'pk.eyJ1Ijoia2NvdHRlbiIsImEiOiJjam5qOTBxczQwd3hnM3BvM2g3a3B2amZsIn0.zmWKaRsfmBEdwlU3ejmKqQ'
+        }).addTo(mymap);
+        // Add filelayer, move to filelayer init or get rid of possibly
+        var style = {color:'red', opacity: 1.0, fillOpacity: 1.0, weight: 2, clickable: false};
+            L.Control.FileLayerLoad.LABEL = '<i class="fa fa-folder-open"></i>';
+            L.Control.fileLayerLoad({
+            fitBounds: true,
+            layerOptions: {style: style,
+                         pointToLayer: function (data, latlng) {
+                            return L.circleMarker(latlng, {style: style});
+                        }},
+        }).addTo(mymap);
+    }
     
+    self.initLayers = function() {
+        
+    }
+
     self.vue = new Vue({
         el: "#vue-div",
         delimiters: ['${', '}'],
         unsafeDelimiters: ['!{', '}'],
         data: {
-
+            map: null,
+            tileLayer: null,
+            layers: [],
+        },
+        mounted() { 
+            /* Code to run when app is mounted */ 
+            this.initMap();
+            this.initLayers();
         },
         methods: {
+            initMap: self.initMap,
+            initLayers: self.initLayers,
 
         },
     });
