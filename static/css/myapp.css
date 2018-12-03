@@ -49,6 +49,27 @@
     padding-left:30px;
 }
 
+#my_track_list {
+    padding-top:5px;
+}
+
+#my_track_list:hover {
+    background-color:#ffdd9e;
+}
+
+#favorited_track_list {
+    padding-top:5px;
+    margin-top:5px;
+}
+
+#favorited_track_list:hover {
+    background-color:#ffdd9e;
+}
+
+.buttons {
+    border-radius:10px;
+}
+
 .big_text {
     font-size:1.3em;
     font-weight:bold;
