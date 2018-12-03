@@ -73,3 +73,14 @@ CREATE TABLE "gpx"(
     "gpx_time" TIMESTAMP
 );
 success!
+timestamp: 2018-12-03T12:44:06.531000
+CREATE TABLE "web2py_session_Map_site"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "locked" CHAR(1),
+    "client_ip" CHAR(64),
+    "created_datetime" TIMESTAMP,
+    "modified_datetime" TIMESTAMP,
+    "unique_key" CHAR(64),
+    "session_data" BLOB
+);
+success!
