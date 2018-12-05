@@ -58,6 +58,7 @@ $(document).ready(function(e) {
 var app = function() {
 
     const None = undefined;
+    var user_email = "";
 
     Vue.config.silent = false; // show all warnings
 
@@ -93,7 +94,7 @@ var app = function() {
         $.getJSON(get_track_list_url,
             function(response) {
                 self.vue.track_list = data.track_list;
-                self.process_s();
+                self.process_tracks();
             }
         );
     };   
@@ -105,13 +106,47 @@ var app = function() {
         });
     };
 
+    // TODO: place holder edit functionality
+    self.edit_track = function(track_idx, track_content, track_title) {
+        //self.vue.post_list[post_idx].editing = !self.vue.post_list[post_idx].editing;
+        $.post(edit_track_url, {
+                id:self.vue.track_list[track_idx].id, 
+                content: track_content, 
+                title: track_title
+            },
+            function(response) {
+            });
+    };
+
+    self.upload_track = function(event, track_idx) {
+        var track_id = self.vue.track_list[track_idx].id;
+        var input = event.target;
+        var file = input.files[0];
+        if (file) {
+            var reader = new FileReader();
+            reader.addEventListener("load", function () {
+                // See https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs
+                // here is where we can also call the map
+                $.post(upload_track_url, {
+                    track_content: reader.result,
+                    track_id: track_id
+                });
+            }, false);
+            // Reads the file as text. Triggers above event handler.
+            reader.readAsText(file);
+        }
+    }
+
     //FIXME: When vue is working, implement this and remove above method.
     //self.press_menu_button = function () {
     //    
     //};
 
+    // there is a callback, but what it returns is beyond complicated. Will be easier to just upload seperately
+    // and then load into JS and display with calls to leaflet.filelayer
     self.initMap = function() {
         // loads map into div called mapid
+        // TODO...need to configure this to be self.map
         var mymap = L.map("mapid").setView([36.98, 237.98], 13);
 
         L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
@@ -122,21 +157,45 @@ var app = function() {
         }).addTo(mymap);
         // Add filelayer, move to filelayer init or get rid of possibly
         var style = {color:'red', opacity: 1.0, fillOpacity: 1.0, weight: 2, clickable: false};
-            L.Control.FileLayerLoad.LABEL = '<i class="fa fa-folder-open"></i>';
-            L.Control.fileLayerLoad({
-                fitBounds: true,
-                layerOptions: {
-                    style: style,
-                    pointToLayer: function (data, latlng) {
-                        return L.circleMarker(latlng, {style: style});
-                    }
-                },
+        L.Control.FileLayerLoad.LABEL = '<i class="fa fa-folder-open"></i>';
+        var control = new L.Control.fileLayerLoad({
+            fitBounds: true,
+            layerOptions: {
+                style: style,
+                pointToLayer: function (data, latlng) {
+                    return L.circleMarker(latlng, {style: style});
+                }
+            },
         }).addTo(mymap);
+        control.loader.on('data:loaded', function (e) {
+            const layer = e.layer;
+            console.log(e.filename);
+            console.log(layer);
+            layerswitcher.addOverlay(e.layer, e.filename);
+            // Do something here with the layer, like introspect its points.
+            // See Leaflet.js reference.
+        });
     }
     
     self.initLayers = function() {
-        // TODO: move the filelayer here, probably insert our file ??
+        // TODO: move the filelayer here maybe
     }
+
+    // get the user email for the front end
+    self.get_user_email = function() {
+        $.getJSON(get_user_email_for_frontend_url,
+            function(response) {
+                if(response.email != None) {
+                    // user_email is meant to be local to the js, probably redundant?
+                    user_email = response.email;
+                    self.vue.user_email = response.email;
+                } else {
+                    user_email = "";
+                    self.vue.user_email = "";
+                }                
+            }
+        );
+    };
 
     self.vue = new Vue({
         el: "#vue-div",
@@ -145,13 +204,13 @@ var app = function() {
         data: {
             map: null,
             tileLayer: null,
-            layers: [], // may not need
+            layers: [], // may not need, we can get some interactivity going with the filelayer here though
             track_list: [],
             track_content: null,
             user_email: "",
         },
         mounted() { 
-            /* Code to run when app is mounted */ 
+            /* Code to run when app is mounted */
             this.initMap();
             this.initLayers();
         },
@@ -159,11 +218,13 @@ var app = function() {
             initMap: self.initMap,
             initLayers: self.initLayers,
             add_track: self.add_track,
-
+            edit_track: self.edit_track,
+            upload_track: self.upload_track,
+            get_user_email: self.get_user_email,
         },
     });
     
-    // If we are logged in, shows the form to add posts.
+    // If we are logged in can do a variety of things based on that
     if (is_logged_in) {
 
     }

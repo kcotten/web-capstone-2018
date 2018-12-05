@@ -4,9 +4,13 @@
 <script src="{{=URL('static', 'js/vue.js')}}"></script>
 <script>
   var add_track_url = "{{=URL('api', 'add_track', user_signature=True)}}";
+  var edit_track_url = "{{=URL('api', 'edit_track', user_signature=True)}}";
   var get_track_list_url = "{{=URL('api', 'get_track_list')}}";
+  var upload_track_url = "{{=URL('api', 'upload_track')}}";
   var get_track_content_url = "{{=URL('api', 'get_track_content')}}";
+  var get_user_email_for_frontend_url = "{{=URL('api', 'get_user_email_for_frontend', user_signature=True)}}";
   var is_logged_in = {{='false' if auth.user is None else 'true'}};
+  
 </script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css"
     integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
