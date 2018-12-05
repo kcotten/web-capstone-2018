@@ -22,9 +22,9 @@ def get_user_email():
 def get_current_time():
     return datetime.datetime.utcnow()
 
-db.define_table('gpx',
-                Field('gpx_author', default=get_user_email()),
-                Field('gpx_title'),
-                Field('gpx_content', 'text'),
-                Field('gpx_time', 'datetime', default=get_current_time()),
+db.define_table('track',
+                Field('track_author', default=get_user_email()),
+                Field('track_title'),
+                Field('track_content', 'text'),
+                Field('track_time', 'datetime', default=get_current_time()),
                 )

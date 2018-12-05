@@ -57,6 +57,8 @@ $(document).ready(function(e) {
 
 var app = function() {
 
+    const None = undefined;
+
     Vue.config.silent = false; // show all warnings
 
     // Extends an array
@@ -68,6 +70,40 @@ var app = function() {
 
     // Enumerates an array.
     var enumerate = function(v) { var k=0; return v.map(function(e) {e._idx = k++;});};
+
+    self.add_track = function () {
+        var sent_title = self.vue.form_title;
+        var sent_content = self.vue.form_content;
+        $.post(add_track_url, {track_title: self.vue.form_title, track_content: self.vue.form_content},
+            function (response) {
+                self.vue.form_title = "";
+                self.vue.form_content = ""; 
+                var new_track = {
+                    id: response.track_id,
+                    track_title: sent_title,
+                    track_content: sent_content,
+                    track_author: self.vue.user_email,                    
+                };
+                self.vue.track_list.unshift(new_track);
+                self.process_tracks();
+            });
+    };
+
+    self.get_tracks = function() {
+        $.getJSON(get_track_list_url,
+            function(response) {
+                self.vue.track_list = data.track_list;
+                self.process_s();
+            }
+        );
+    };   
+
+    self.process_tracks = function() { 
+        enumerate(self.vue.track_list);
+        self.vue.track_list.map(function (e) {
+
+        });
+    };
 
     //FIXME: When vue is working, implement this and remove above method.
     //self.press_menu_button = function () {
@@ -88,16 +124,18 @@ var app = function() {
         var style = {color:'red', opacity: 1.0, fillOpacity: 1.0, weight: 2, clickable: false};
             L.Control.FileLayerLoad.LABEL = '<i class="fa fa-folder-open"></i>';
             L.Control.fileLayerLoad({
-            fitBounds: true,
-            layerOptions: {style: style,
-                         pointToLayer: function (data, latlng) {
-                            return L.circleMarker(latlng, {style: style});
-                        }},
+                fitBounds: true,
+                layerOptions: {
+                    style: style,
+                    pointToLayer: function (data, latlng) {
+                        return L.circleMarker(latlng, {style: style});
+                    }
+                },
         }).addTo(mymap);
     }
     
     self.initLayers = function() {
-        
+        // TODO: move the filelayer here, probably insert our file ??
     }
 
     self.vue = new Vue({
@@ -107,7 +145,10 @@ var app = function() {
         data: {
             map: null,
             tileLayer: null,
-            layers: [],
+            layers: [], // may not need
+            track_list: [],
+            track_content: null,
+            user_email: "",
         },
         mounted() { 
             /* Code to run when app is mounted */ 
@@ -117,6 +158,7 @@ var app = function() {
         methods: {
             initMap: self.initMap,
             initLayers: self.initLayers,
+            add_track: self.add_track,
 
         },
     });
