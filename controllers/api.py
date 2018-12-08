@@ -10,20 +10,15 @@ def add_track():
     return response.json(dict(track_id=track_id))
 
 
-@auth.requires_signature()
 def get_track_content():
-    # maybe move fetching tracks to a seperate function due to lag concerns
     rows = db(db.track).select()
-    pid = int(request.vars.id)
+    pid = int(request.vars.track_id)
+    print(pid)
     for row in rows:
         if row.id == pid:
-            track_to_send = dict(
-                track_title = row.track_title,
-                track_content = row.track_content,
-                track_author = row.track_author,
-            )
-
-    return response.json(dict(track=track_to_send))
+            print("inside if statement")
+            track_content = row.track_content
+    return response.json(dict(track_content=track_content))
 
 
 #@auth.requires_signature()
@@ -62,8 +57,8 @@ def upload_track():
     track_id = int(request.vars.track_id)
     
     db.track.update_or_insert(
-        (db.track.track_id == track_id),
-        track_id = track_id,
+        (db.track.id == track_id),
+        #track_id = track_id,
         track_content = track_content
     )
     return "ok"

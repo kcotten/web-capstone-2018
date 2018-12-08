@@ -94,7 +94,7 @@ var app = function() {
     };
 
     // Enumerates an array.
-    var enumerate = function(v) { /*var k=0;*/ return v.map(function(e) {e._idx = track_count++; console.log(track_count);});};
+    var enumerate = function(v) { /*var k=0;*/ return v.map(function(e) {e._idx = track_count++;});};
 
     self.add_track = function () {
         //var sent_title = self.vue.track_add_title;
@@ -149,6 +149,7 @@ var app = function() {
 
     self.upload_track = function(event, track_idx) {
         var track_id = self.vue.track_list[track_idx].id;
+        console.log("Track_id: " + track_id);
         var input = event.target;
         var file = input.files[0];
         if (file) {
@@ -157,16 +158,30 @@ var app = function() {
             reader.addEventListener("load", function () {
                 // See https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs
                 // here is where we can also call the map
-
+                //console.log("Reader Contents: " + reader.result);
                 $.post(upload_track_url, {
                     track_content: reader.result,
                     track_id: track_id
                 });
+                //self.get_track_for_display(track_id);
             }, false);
             // Reads the file as text. Triggers above event handler.
             reader.readAsText(file);
-        }
-    }
+        };
+    };
+    
+    self.get_track_for_display = function(track_id) {
+        $.getJSON(get_track_content_url, {track_id: track_id, }, 
+            function(response) {
+                console.log("Response: " + response.track_content);
+                var runLayer = omnivore.gpx(response.track_content)
+                .on('ready', function() {
+                    this.map.fitBounds(runLayer.getBounds());
+                })
+                .addTo(this.map);
+            }
+        );
+    };
 
     //FIXME: When vue is working, implement this and remove above method.
     //self.press_menu_button = function () {
@@ -178,14 +193,14 @@ var app = function() {
     self.initMap = function() {
         // loads map into div called mapid
         // TODO...need to configure this to be self.map
-        var mymap = L.map("mapid").setView([36.98, 237.98], 13);
+        this.map = L.map("mapid").setView([36.98, 237.98], 13);
 
         L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
             attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
             maxZoom: 18,
             id: 'mapbox.streets',
             accessToken: 'pk.eyJ1Ijoia2NvdHRlbiIsImEiOiJjam5qOTBxczQwd3hnM3BvM2g3a3B2amZsIn0.zmWKaRsfmBEdwlU3ejmKqQ'
-        }).addTo(mymap);
+        }).addTo(this.map);
         // Add filelayer, move to filelayer init or get rid of possibly
         var style = {color:'red', opacity: 1.0, fillOpacity: 1.0, weight: 2, clickable: false};
         L.Control.FileLayerLoad.LABEL = '<i class="fa fa-folder-open"></i>';
@@ -197,7 +212,7 @@ var app = function() {
                     return L.circleMarker(latlng, {style: style});
                 }
             },
-        }).addTo(mymap);
+        }).addTo(this.map);
 
         control.loader.on('data:loaded', function (e) {
             const layer = e.layer;
@@ -238,6 +253,11 @@ var app = function() {
 	    }
         self.vue.track_add_title = "";
     };
+    
+    self.click_load_track_btn = function(idx) {
+        var track_id = self.vue.track_list[idx].id;
+        self.get_track_for_display(track_id);
+    };
 
     self.vue = new Vue({
         el: "#vue-div",
@@ -268,6 +288,8 @@ var app = function() {
             upload_track: self.upload_track,
             get_user_email: self.get_user_email,
 	        click_add_track_btn: self.click_add_track_btn,
+	        get_track_for_display : self.get_track_for_display,
+	        click_load_track_btn: self.click_load_track_btn,
         },
     });
     

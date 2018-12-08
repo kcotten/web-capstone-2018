@@ -21,6 +21,7 @@
     crossorigin=""></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-gpx/1.4.0/gpx.min.js"></script>
   <script src='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js'></script>
+  
   <script src="{{=URL('static', 'js/leaflet.filelayer.js')}}"></script>
   <script src="{{=URL('static', 'js/togeojson.js')}}"> </script>
 {{end}}
@@ -73,7 +74,7 @@
             <div style="padding-left:30px; width=100%">
 	      <div class="track_title">${track.track_title}</div>
 	      <div style="position:relative; top=0px; float:right; padding-right:20px;">
-	        <button v-if="track.track_content" class="btn small fa fa-folder-open buttons">&nbsp;&nbsp;Load</button>
+	        <button v-if="track.track_content" v-on:click="click_load_track_btn(track._idx)" class="btn small fa fa-folder-open buttons">&nbsp;&nbsp;Load</button>
 	        <button v-if="!track.track_content" class="btn fa fa-folder-open buttons">&nbsp;&nbsp;Upload</button>
 	        <button class="btn fa fa-remove buttons">&nbsp;&nbsp;Delete</button>
                 <input v-if="!track.track_content" id="file_input" type="file" v-on:change="upload_track($event, track._idx)" accept="image/jpeg">

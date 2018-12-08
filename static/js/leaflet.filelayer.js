@@ -252,12 +252,12 @@
             }, this);
 
             // Initialize Drag-and-drop
-            this._initDragAndDrop(map);
+            //this._initDragAndDrop(map);
 
             // Initialize map control
             return this._initContainer();
         },
-
+/*
         _initDragAndDrop: function (map) {
             var callbackName;
             var thisLoader = this.loader;
@@ -288,7 +288,7 @@
                 }
             }
         },
-
+*/
         _initContainer: function () {
             var thisLoader = this.loader;
 
