@@ -62,6 +62,8 @@ window.addEventListener("resize", resizeFunction);
 function resizeFunction() {
     var windowHeight = $(window).height();
     var windowWidth = $(window).outerWidth(true);
+    var menu_width = "30%";
+    var map_width = "70%";
     const track_titles = document.querySelectorAll('.track_title');
     track_titles.forEach(element => {
         var width = (.3*windowWidth)-255;
@@ -102,13 +104,14 @@ var app = function() {
 	self.vue.adding_track = false;
         $.post(add_track_url, {track_title: self.vue.track_add_title, track_content: self.vue.form_content},
             function (response) {
-                self.vue.track_add_title = "";
-                self.vue.form_content = ""; 
+                //self.vue.track_add_title = "";
+		console.log("Check 2: " + self.vue.track_add_title);
+                //self.vue.form_content = "";
                 var new_track = {
                     id: response.track_id,
                     track_title: self.vue.track_add_title,
                     track_content: self.vue.form_content,
-                    track_author: self.vue.user_email,                    
+                    track_author: self.vue.user_email, 
                 };
                 self.vue.track_list.unshift(new_track);
                 self.process_tracks();
