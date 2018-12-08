@@ -31,14 +31,15 @@ def get_track_list():
     results = []
     rows = db(db.track).select(orderby=~db.track.track_time)
     for row in rows:
-        tracks_to_send = dict(
-            id=int(row.id),
-            track_title=row.track_title,
-            track_content=row.track_content,
-            track_author=row.track_author,
-        )
-        print(tracks_to_send)
-        results.append(tracks_to_send)
+        if row.track_author == auth.user.email:
+            tracks_to_send = dict(
+                id=int(row.id),
+                track_title=row.track_title,
+                track_content=row.track_content,
+                track_author=row.track_author,
+            )
+            print(tracks_to_send)
+            results.append(tracks_to_send)
 
     return response.json(dict(track_list=results))
 
@@ -56,13 +57,12 @@ def edit_track():
             row.update_record(track_content=request.vars.content, track_title=title)
     return "ok!"
 
-
 def upload_track():
     track_content = request.vars.track_content
     track_id = int(request.vars.track_id)
     
     db.track.update_or_insert(
-        (db.track.track_id == track_id),
+        (db.track.id == track_id),
         track_id = track_id,
         track_content = track_content
     )
