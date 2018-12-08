@@ -146,8 +146,7 @@ var app = function() {
     };
 
     self.upload_track = function(event, track_idx) {
-	var track = self.vue.track_list[track_idx];
-        var track_id = track.id;
+        var track_id = self.vue.track_list[track_idx].id;
 	track.show_file_field = false;
         var input = event.target;
         var file = input.files[0];
@@ -160,11 +159,25 @@ var app = function() {
                     track_content: reader.result,
                     track_id: track_id
                 });
+                //self.get_track_for_display(track_id);
             }, false);
             // Reads the file as text. Triggers above event handler.
             reader.readAsText(file);
-        }
-    }
+        };
+    };
+    
+    self.get_track_for_display = function(track_id) {
+        $.getJSON(get_track_content_url, {track_id: track_id, }, 
+            function(response) {
+                console.log("Response: " + response.track_content);
+                var runLayer = omnivore.gpx(response.track_content)
+                .on('ready', function() {
+                    this.map.fitBounds(runLayer.getBounds());
+                })
+                .addTo(this.map);
+            }
+        );
+    };
 
     self.delete_track = function(id) {
         //var track = self.vue.track_list[track_idx];
@@ -192,14 +205,14 @@ var app = function() {
     self.initMap = function() {
         // loads map into div called mapid
         // TODO...need to configure this to be self.map
-        var mymap = L.map("mapid").setView([36.98, 237.98], 13);
+        this.map = L.map("mapid").setView([36.98, 237.98], 13);
 
         L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
             attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
             maxZoom: 18,
             id: 'mapbox.streets',
             accessToken: 'pk.eyJ1Ijoia2NvdHRlbiIsImEiOiJjam5qOTBxczQwd3hnM3BvM2g3a3B2amZsIn0.zmWKaRsfmBEdwlU3ejmKqQ'
-        }).addTo(mymap);
+        }).addTo(this.map);
         // Add filelayer, move to filelayer init or get rid of possibly
         var style = {color:'red', opacity: 1.0, fillOpacity: 1.0, weight: 2, clickable: false};
         L.Control.FileLayerLoad.LABEL = '<i class="fa fa-folder-open"></i>';
@@ -211,7 +224,7 @@ var app = function() {
                     return L.circleMarker(latlng, {style: style});
                 }
             },
-        }).addTo(mymap);
+        }).addTo(this.map);
 
         control.loader.on('data:loaded', function (e) {
             const layer = e.layer;
@@ -252,6 +265,11 @@ var app = function() {
             self.vue.adding_track = true;
 	    }
         self.vue.track_add_title = "";
+    };
+    
+    self.click_load_track_btn = function(idx) {
+        var track_id = self.vue.track_list[idx].id;
+        self.get_track_for_display(track_id);
     };
 
     self.click_upload_btn = function(track_idx) {
@@ -294,6 +312,8 @@ var app = function() {
             get_user_email: self.get_user_email,
 	    click_add_track_btn: self.click_add_track_btn,
 	    click_upload_btn: self.click_upload_btn,
+	    click_load_track_btn: self.click_load_track_btn,
+	    get_track_for_display: self.get_track_for_display,
 	    delete_track: self.delete_track,
         },
     });
