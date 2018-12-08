@@ -10,7 +10,6 @@ $(document).ready(function(e) {
 	var windowWidth = $(window).outerWidth(true);
 	console.log("Height: " + windowHeight);
 	console.log("Width: " + windowWidth);
-	
 
 	$("#menuid").css({
             "width":menu_width
@@ -18,8 +17,12 @@ $(document).ready(function(e) {
 	$("#mapid").css({
             "width":map_width
 	})
-	$("#horiz_bar").css({
-	})
+
+	const track_titles = document.querySelectorAll('.track_title');
+	track_titles.forEach(element => {
+	  var width = (.3*windowWidth)-255;
+          element.style.width=width;
+	});
 
 	
 	/*$("#menu_button").click(function () {
@@ -53,6 +56,24 @@ $(document).ready(function(e) {
 	    }
 	});
 });
+//Anything that needs to resize itself should go in the resizeFunction.
+window.addEventListener("resize", resizeFunction);
+function resizeFunction() {
+    var windowHeight = $(window).height();
+    var windowWidth = $(window).outerWidth(true);
+    const track_titles = document.querySelectorAll('.track_title');
+    track_titles.forEach(element => {
+        var width = (.3*windowWidth)-255;
+        element.style.width=width;
+    });
+    $("#menuid").css({
+        "width":menu_width
+    })
+    $("#mapid").css({
+        "width":map_width
+    })
+}
+
 
 
 var app = function() {
@@ -93,7 +114,7 @@ var app = function() {
     self.get_tracks = function() {
         $.getJSON(get_track_list_url,
             function(response) {
-                self.vue.track_list = data.track_list;
+                self.vue.track_list = response.track_list;
                 self.process_tracks();
             }
         );
@@ -207,7 +228,8 @@ var app = function() {
             layers: [], // may not need, we can get some interactivity going with the filelayer here though
             track_list: [],
             track_content: null,
-            user_email: "",
+            //user_email: "", //Having this set here would over write the value I put in index.html. Therefore I suggest removing it
+		              //    unless if for some security concern (?).
         },
         mounted() { 
             /* Code to run when app is mounted */
@@ -221,6 +243,7 @@ var app = function() {
             edit_track: self.edit_track,
             upload_track: self.upload_track,
             get_user_email: self.get_user_email,
+	    is_my_track: self.is_my_track,
         },
     });
     
@@ -228,6 +251,9 @@ var app = function() {
     if (is_logged_in) {
 
     }
+
+    //Get tracks
+    self.get_tracks();
 
     return self;
 };

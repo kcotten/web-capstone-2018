@@ -1,3 +1,6 @@
+body{
+    min-width:1100px;
+}
 
 #mapid {
     height: 88%;
@@ -49,12 +52,25 @@
     padding-left:30px;
 }
 
-#my_track_list {
+/*.my_track_2 {
+    min-height:32px;
+    margin-bottom:15;
+}*/
+
+.my_track {
     padding-top:5px;
+    border-radius:15px;
+    min-height:42px;
+    margin-bottom:15px;
 }
 
-#my_track_list:hover {
+.my_track:hover {
     background-color:#ffdd9e;
+}
+
+.track_title {
+    position:absolute;
+    max-width:200px;
 }
 
 #favorited_track_list {
