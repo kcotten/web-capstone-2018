@@ -81,7 +81,8 @@ function resizeFunction() {
 var app = function() {
 
     const None = undefined;
-    var user_email = "";
+    //var user_email = "";
+    var track_count = 0;
 
     Vue.config.silent = false; // show all warnings
 
@@ -93,7 +94,7 @@ var app = function() {
     };
 
     // Enumerates an array.
-    var enumerate = function(v) { var k=0; return v.map(function(e) {e._idx = k++;});};
+    var enumerate = function(v) { /*var k=0;*/ return v.map(function(e) {e._idx = track_count++; console.log(track_count);});};
 
     self.add_track = function () {
         //var sent_title = self.vue.track_add_title;
@@ -151,10 +152,12 @@ var app = function() {
         var input = event.target;
         var file = input.files[0];
         if (file) {
+	    //console.log("about to add file contents.");
             var reader = new FileReader();
             reader.addEventListener("load", function () {
                 // See https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs
                 // here is where we can also call the map
+
                 $.post(upload_track_url, {
                     track_content: reader.result,
                     track_id: track_id

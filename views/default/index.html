@@ -60,6 +60,9 @@
       </div>
       <div v-if="adding_track" style="padding-left:10%; width:80%; margin_bottom:30px">
         <input v-model="track_add_title" placeholder="Enter a track title"/>
+
+<input id="file_input" type="file" v-on:change="upload_track($event, 1)" accept="image/jpeg">
+
 	<button class="btn buttons" v-on:click="add_track()">Submit</button>
 	<button class="btn buttons" v-on:click="click_add_track_btn()">Cancel</button>
       </div>
@@ -70,8 +73,10 @@
             <div style="padding-left:30px; width=100%">
 	      <div class="track_title">${track.track_title}</div>
 	      <div style="position:relative; top=0px; float:right; padding-right:20px;">
-	        <button class="btn fa fa-folder-open buttons">&nbsp;&nbsp;Load</button>
+	        <button v-if="track.track_content" class="btn small fa fa-folder-open buttons">&nbsp;&nbsp;Load</button>
+	        <button v-if="!track.track_content" class="btn fa fa-folder-open buttons">&nbsp;&nbsp;Upload</button>
 	        <button class="btn fa fa-remove buttons">&nbsp;&nbsp;Delete</button>
+                <input v-if="!track.track_content" id="file_input" type="file" v-on:change="upload_track($event, track._idx)" accept="image/jpeg">
 	      </div>
 	    </div>
   	  </div>
