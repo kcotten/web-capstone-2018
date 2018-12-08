@@ -9,6 +9,12 @@ def add_track():
     )
     return response.json(dict(track_id=track_id))
 
+@auth.requires_login()
+def delete_track():
+    track_id = request.vars.track_id;
+    db(db.track.id == track_id).delete();
+    return "WE DELETED."
+
 
 @auth.requires_signature()
 def get_track_content():
@@ -56,6 +62,9 @@ def edit_track():
             # TODO: make sure we can update multiple values this way
             row.update_record(track_content=request.vars.content, track_title=title)
     return "ok!"
+
+
+    
 
 def upload_track():
     track_content = request.vars.track_content

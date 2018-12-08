@@ -8,8 +8,6 @@ $(document).ready(function(e) {
 	
 	var windowHeight = $(window).height();
 	var windowWidth = $(window).outerWidth(true);
-	console.log("Height: " + windowHeight);
-	console.log("Width: " + windowWidth);
 
 	$("#menuid").css({
             "width":menu_width
@@ -94,7 +92,7 @@ var app = function() {
     };
 
     // Enumerates an array.
-    var enumerate = function(v) { /*var k=0;*/ return v.map(function(e) {e._idx = track_count++; console.log(track_count);});};
+    var enumerate = function(v) { /*var k=0;*/ return v.map(function(e) {e._idx = track_count++;});};
 
     self.add_track = function () {
         //var sent_title = self.vue.track_add_title;
@@ -106,7 +104,6 @@ var app = function() {
         $.post(add_track_url, {track_title: self.vue.track_add_title, track_content: self.vue.form_content},
             function (response) {
                 //self.vue.track_add_title = "";
-		console.log("Check 2: " + self.vue.track_add_title);
                 //self.vue.form_content = "";
                 var new_track = {
                     id: response.track_id,
@@ -114,6 +111,7 @@ var app = function() {
                     track_content: self.vue.form_content,
                     track_author: self.vue.user_email, 
                 };
+		self.get_tracks();
                 self.vue.track_list.unshift(new_track);
                 self.process_tracks();
             });
@@ -131,7 +129,7 @@ var app = function() {
     self.process_tracks = function() { 
         enumerate(self.vue.track_list);
         self.vue.track_list.map(function (e) {
-
+            Vue.set(e, 'show_file_field', false);
         });
     };
 
@@ -148,16 +146,16 @@ var app = function() {
     };
 
     self.upload_track = function(event, track_idx) {
-        var track_id = self.vue.track_list[track_idx].id;
+	var track = self.vue.track_list[track_idx];
+        var track_id = track.id;
+	track.show_file_field = false;
         var input = event.target;
         var file = input.files[0];
         if (file) {
-	    //console.log("about to add file contents.");
             var reader = new FileReader();
             reader.addEventListener("load", function () {
                 // See https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs
                 // here is where we can also call the map
-
                 $.post(upload_track_url, {
                     track_content: reader.result,
                     track_id: track_id
@@ -167,6 +165,22 @@ var app = function() {
             reader.readAsText(file);
         }
     }
+
+    self.delete_track = function(id) {
+        //var track = self.vue.track_list[track_idx];
+	var track_id = id;
+	/*$.post(delete_track_url, {
+	    track_id:track_id
+	});
+        self.get_tracks();
+        self.process_tracks();*/
+
+        $.post(delete_track_url, {track_id: track_id},
+            function (response) {
+		self.get_tracks();
+            }
+	);
+    };
 
     //FIXME: When vue is working, implement this and remove above method.
     //self.press_menu_button = function () {
@@ -231,12 +245,22 @@ var app = function() {
     };
 
     self.click_add_track_btn = function() {
+	//This is only for whether or not to show input fields. Does not add the track.
         if(self.vue.adding_track) {
             self.vue.adding_track = false;
 	    } else {
             self.vue.adding_track = true;
 	    }
         self.vue.track_add_title = "";
+    };
+
+    self.click_upload_btn = function(track_idx) {
+	var p = self.vue.track_list[track_idx];
+        if(p.show_file_field) {
+            p.show_file_field = false;
+	} else {
+            p.show_file_field = true;
+	}
     };
 
     self.vue = new Vue({
@@ -252,6 +276,7 @@ var app = function() {
 	        map_fullsize: false,
 	        adding_track: false,
 	        track_add_title: "",
+		show_file_field: false,
             //user_email: "", //Having this set here would over write the value I put in index.html. Therefore I suggest removing it
 		              //    unless if for some security concern (?).
         },
@@ -267,7 +292,9 @@ var app = function() {
             edit_track: self.edit_track,
             upload_track: self.upload_track,
             get_user_email: self.get_user_email,
-	        click_add_track_btn: self.click_add_track_btn,
+	    click_add_track_btn: self.click_add_track_btn,
+	    click_upload_btn: self.click_upload_btn,
+	    delete_track: self.delete_track,
         },
     });
     
