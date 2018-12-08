@@ -192,6 +192,7 @@ var app = function() {
                 }
             },
         }).addTo(mymap);
+
         control.loader.on('data:loaded', function (e) {
             const layer = e.layer;
             console.log(e.filename);
@@ -203,7 +204,7 @@ var app = function() {
     }
     
     self.initLayers = function() {
-        // TODO: move the filelayer here maybe
+        // TODO: move the filelayer here maybe        
     }
 
     // get the user email for the front end
@@ -226,9 +227,9 @@ var app = function() {
     self.click_add_track_btn = function() {
         if(self.vue.adding_track) {
             self.vue.adding_track = false;
-	} else {
+	    } else {
             self.vue.adding_track = true;
-	}
+	    }
         self.vue.track_add_title = "";
     };
 
@@ -242,9 +243,9 @@ var app = function() {
             layers: [], // may not need, we can get some interactivity going with the filelayer here though
             track_list: [],
             track_content: null,
-	    map_fullsize: false,
-	    adding_track: false,
-	    track_add_title: "",
+	        map_fullsize: false,
+	        adding_track: false,
+	        track_add_title: "",
             //user_email: "", //Having this set here would over write the value I put in index.html. Therefore I suggest removing it
 		              //    unless if for some security concern (?).
         },
@@ -260,7 +261,7 @@ var app = function() {
             edit_track: self.edit_track,
             upload_track: self.upload_track,
             get_user_email: self.get_user_email,
-	    click_add_track_btn: self.click_add_track_btn,
+	        click_add_track_btn: self.click_add_track_btn,
         },
     });
     

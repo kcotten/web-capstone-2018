@@ -37,7 +37,7 @@ def get_track_list():
             track_content=row.track_content,
             track_author=row.track_author,
         )
-        print(tracks_to_send);
+        print(tracks_to_send)
         results.append(tracks_to_send)
 
     return response.json(dict(track_list=results))
@@ -60,8 +60,7 @@ def edit_track():
 def upload_track():
     track_content = request.vars.track_content
     track_id = int(request.vars.track_id)
-    # Normally, here I would have to check that the user can store the
-    # image to the blog post, etc etc.
+    
     db.track.update_or_insert(
         (db.track.track_id == track_id),
         track_id = track_id,
