@@ -33,10 +33,11 @@ $(document).ready(function(e) {
 	})*/
 
 
-        $("#menu_button2").click(function(){
+        $("#menu_button").click(function(){
 	    /*$("#menu_button").transition({
 	        "right":"500"
 	    },500,"easeInOutBack")*/
+	    console.log("CLICK!");
 	    if (map_fullscreen) {
 	        $("#menuid").css({
                     "width":menu_width
@@ -75,7 +76,6 @@ function resizeFunction() {
 }
 
 
-
 var app = function() {
 
     const None = undefined;
@@ -94,16 +94,20 @@ var app = function() {
     var enumerate = function(v) { var k=0; return v.map(function(e) {e._idx = k++;});};
 
     self.add_track = function () {
-        var sent_title = self.vue.form_title;
-        var sent_content = self.vue.form_content;
-        $.post(add_track_url, {track_title: self.vue.form_title, track_content: self.vue.form_content},
+        //var sent_title = self.vue.track_add_title;
+        //var sent_content = self.vue.form_content;
+	    
+	//REPLACE ALL MENTION OF track_content IN HERE WITH THE FILE NAME AND/OR FILE CONTENT.
+	console.log("add_track(): " + self.vue.track_add_title);
+	self.vue.adding_track = false;
+        $.post(add_track_url, {track_title: self.vue.track_add_title, track_content: self.vue.form_content},
             function (response) {
-                self.vue.form_title = "";
+                self.vue.track_add_title = "";
                 self.vue.form_content = ""; 
                 var new_track = {
                     id: response.track_id,
-                    track_title: sent_title,
-                    track_content: sent_content,
+                    track_title: self.vue.track_add_title,
+                    track_content: self.vue.form_content,
                     track_author: self.vue.user_email,                    
                 };
                 self.vue.track_list.unshift(new_track);
@@ -203,6 +207,7 @@ var app = function() {
     }
 
     // get the user email for the front end
+	//This should not be necessary. I used a call in index.html to get user_email.
     self.get_user_email = function() {
         $.getJSON(get_user_email_for_frontend_url,
             function(response) {
@@ -218,6 +223,15 @@ var app = function() {
         );
     };
 
+    self.click_add_track_btn = function() {
+        if(self.vue.adding_track) {
+            self.vue.adding_track = false;
+	} else {
+            self.vue.adding_track = true;
+	}
+        self.vue.track_add_title = "";
+    };
+
     self.vue = new Vue({
         el: "#vue-div",
         delimiters: ['${', '}'],
@@ -228,6 +242,9 @@ var app = function() {
             layers: [], // may not need, we can get some interactivity going with the filelayer here though
             track_list: [],
             track_content: null,
+	    map_fullsize: false,
+	    adding_track: false,
+	    track_add_title: "",
             //user_email: "", //Having this set here would over write the value I put in index.html. Therefore I suggest removing it
 		              //    unless if for some security concern (?).
         },
@@ -243,7 +260,7 @@ var app = function() {
             edit_track: self.edit_track,
             upload_track: self.upload_track,
             get_user_email: self.get_user_email,
-	    is_my_track: self.is_my_track,
+	    click_add_track_btn: self.click_add_track_btn,
         },
     });
     

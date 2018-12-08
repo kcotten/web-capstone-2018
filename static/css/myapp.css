@@ -37,6 +37,10 @@ body{
     left:30px;
 }
 
+#setting_cog:hover {
+    cursor: pointer;
+}
+
 #horiz_bar {
     background-color: black;
     height:3px;
