@@ -81,6 +81,8 @@ var app = function() {
     const None = undefined;
     //var user_email = "";
     var track_count = 0;
+    var customLayer;
+    var map;
 
     Vue.config.silent = false; // show all warnings
 
@@ -109,7 +111,7 @@ var app = function() {
                     track_author: self.vue.user_email,
                     show_file_field: true,
                 };
-                //self.get_tracks();
+                self.get_tracks();
                 
                 self.vue.track_list.unshift(new_track);
                 self.process_tracks();
@@ -161,19 +163,31 @@ var app = function() {
                 //self.get_track_for_display(track_id);
             }, false);
             // Reads the file as text. Triggers above event handler.
-            reader.readAsText(file);
+            reader.readAsDataURL(file);
         };
     };
     
     self.get_track_for_display = function(track_id) {
         $.getJSON(get_track_content_url, {track_id: track_id, }, 
             function(response) {
-                console.log("Response: " + response.track_content);
-                var runLayer = omnivore.gpx(response.track_content)
-                .on('ready', function() {
-                    this.map.fitBounds(runLayer.getBounds());
+                var gpx = response.track_content; // URL to your GPX file or the GPX itself
+                new L.GPX(gpx, {
+                    async: true,
+                    marker_options: {
+                        startIconUrl: 'http://leafletjs.com/examples/custom-icons/leaf-green.png',
+                        endIconUrl: 'http://leafletjs.com/examples/custom-icons/leaf-red.png',
+                        wptIconUrls: {
+                            '': 'http://leafletjs.com/examples/custom-icons/leaf-orange.png',
+                            'Geocache Found': 'http://leafletjs.com/examples/custom-icons/leaf-orange.png',
+                            'Park': 'http://leafletjs.com/examples/custom-icons/leaf-orange.png'
+                          },
+                        shadowUrl: 'http://leafletjs.com/examples/custom-icons/leaf-shadow.png'
+                    }
                 })
-                .addTo(this.map);
+                .on('loaded', function(e) {
+                    self.vue.map.fitBounds(e.target.getBounds());
+                })
+                .addTo(self.vue.map);
             }
         );
     };
@@ -189,7 +203,7 @@ var app = function() {
 
         $.post(delete_track_url, {track_id: track_id},
             function (response) {
-		self.get_tracks();
+		        self.get_tracks();
             }
 	);
     };
@@ -212,6 +226,7 @@ var app = function() {
             id: 'mapbox.streets',
             accessToken: 'pk.eyJ1Ijoia2NvdHRlbiIsImEiOiJjam5qOTBxczQwd3hnM3BvM2g3a3B2amZsIn0.zmWKaRsfmBEdwlU3ejmKqQ'
         }).addTo(this.map);
+
         // Add filelayer, move to filelayer init or get rid of possibly
         var style = {color:'red', opacity: 1.0, fillOpacity: 1.0, weight: 2, clickable: false};
         L.Control.FileLayerLoad.LABEL = '<i class="fa fa-folder-open"></i>';
