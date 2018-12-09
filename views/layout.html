@@ -14,13 +14,15 @@
     {{include "web2py_ajax.html"}}
     {{block head}}{{end}}
   </head>
-  <body class="olive">
-    {{if response.flash:}}
+
+  <body>
+    <!-- {{if response.flash:}}
     <div class="w2p_flash">
       {{=response.flash}}
     </div>
-    {{pass}}
-    <header class="olive padded">
+    {{pass}} -->
+
+    <!-- <header class="olive padded">
       <div class="container middle max900">
         <div class="fill middle">
           <label class="ham padded fa fa-bars" for="menu"></label>
@@ -35,16 +37,13 @@
           </div>
         </div>
       </div>
-    </header>
-    <main class="white">
+    </header> -->
+
+    <main>
       {{include}}
     </main>
-    <footer class="olive">
-      <div class="silver center padded social">
-        <a class="fa fa-facebook" href="https://www.facebook.com/sharer/sharer.php?u={url}"></a>
-        <a class="fa fa-twitter" href="https://twitter.com/home?status={url}"></a>
-        <a class="fa fa-google" href="https://plus.google.com/share?url={url}"></a>
-      </div>
+
+    <footer class="olive">      
       <div class="container padded max900">
         <div class="fill">
           Copyright @ 2018
@@ -56,6 +55,6 @@
   <script src="{{=URL('static','js/vue.min.js')}}"></script>
   {{block bottomjs}}{{end}}
   <script>
-    jQuery('.social a').each(function(){var t=jQuery(this); t.attr('href',t.attr('href').replace('{url}',encodeURIComponent(window.location.href)));});
+    // jQuery('.social a').each(function(){var t=jQuery(this); t.attr('href',t.attr('href').replace('{url}',encodeURIComponent(window.location.href)));});
   </script>
 </html>

@@ -60,10 +60,19 @@ body{
     padding-left:30px;
 }
 
+.settings {
+    position:right; 
+}
+
+#my_track_list {
+    color: black;
+}
+
 /*.my_track_2 {
     min-height:32px;
     margin-bottom:15;
 }*/
+
 .fade-enter-active, .fade-leave-active {
     transition:all .3s ease;
     transform: translateX(10px);
@@ -94,10 +103,11 @@ body{
 #favorited_track_list {
     padding-top:5px;
     margin-top:5px;
+    color: black;
 }
 
 #favorited_track_list:hover {
-    background-color:#ffdd9e;
+    background-color:#ffdd9e;    
 }
 
 .buttons {
@@ -108,4 +118,5 @@ body{
     font-size:1.3em;
     font-weight:bold;
     font-family:"Verdana";
+    color: black;
 }

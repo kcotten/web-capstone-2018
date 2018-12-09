@@ -15,7 +15,7 @@ def delete_track():
     db(db.track.id == track_id).delete()
     return "WE DELETED."
 
-
+@auth.requires_login()
 def get_track_content():
     rows = db(db.track).select()
     pid = int(request.vars.track_id)

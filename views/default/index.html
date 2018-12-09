@@ -38,15 +38,18 @@
   <transition name="fade">
   <div v-if="!map_fullscreen" id="menuid">
     <div class="big_text" id="user_info_holder">
-      <div v-if="!is_logged_in">
-        <span><a href="login.html">Login</a></span>
-        or
-        <span><a href="sign_up.html">Sign Up</a></span>
-      </div>
-      <div v-if="is_logged_in">
-        <span>Hello, ${user_name}!</span>
-	<i class="fa fa-cog" id="setting_cog" style="position:absolute; right:15"></i>
-      </div>
+      <div>
+        {{if auth.user:}}
+          <div>
+            <span>Hello, ${user_name}!</span>
+            <a class="settings" href="{{=URL('user/profile')}}"><i class="fa fa-cog" id="setting_cog"></i></a>
+          </div>
+          <a href="{{=URL('user/logout')}}">Logout</a>
+        {{else:}}
+          <a href="{{=URL('user/register')}}">Register</a>
+          <a href="{{=URL('user/login')}}">Login</a>              
+        {{pass}}
+      </div>      
     </div>
 
     <!-- FIXME: This should only show up when logged in-->
@@ -89,7 +92,7 @@
       <div class="big_text" style="margin-left:30px; margin-bottom:20px">Your favorited tracks</div>
       <!-- FIXME: Use a v-for here to iterate through my tracks.-->
       <div id="favorited_track_list">
-	<div id="favorited_track" style="min-height:60px">
+	    <div id="favorited_track" style="min-height:60px">
           <div style="padding-left:10px; width=100%;">
   	      <i class="fa fa-star-o"></i>	
               Track1
