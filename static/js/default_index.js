@@ -131,6 +131,8 @@ var app = function() {
         enumerate(self.vue.track_list);
         self.vue.track_list.map(function (e) {
             Vue.set(e, 'show_file_field', false);
+	    //console.log(e.track_content === "");
+	    Vue.set(e, 'need_to_upload', (e.track_content === ""));
         });
     };
 
@@ -146,9 +148,9 @@ var app = function() {
             });
     };
 
-    self.upload_track = function(event, track_idx) {
-        var track_id = self.vue.track_list[track_idx].id;
-	    self.vue.track_list[track_idx].show_file_field = false;
+    self.upload_track = function(event, track) {
+        var track_id = track.id;
+	    track.show_file_field = false;
         var input = event.target;
         var file = input.files[0];
         if (file) {
@@ -160,6 +162,7 @@ var app = function() {
                     track_content: reader.result,
                     track_id: track_id
                 });
+		track.need_to_upload = false;
                 //self.get_track_for_display(track_id);
             }, false);
             // Reads the file as text. Triggers above event handler.
@@ -281,17 +284,17 @@ var app = function() {
         self.vue.track_add_title = "";
     };
     
-    self.click_load_track_btn = function(idx) {
-        var track_id = self.vue.track_list[idx].id;
+    self.click_load_track_btn = function(track) {
+        var track_id = track.id;
         self.get_track_for_display(track_id);
     };
 
-    self.click_upload_btn = function(track_idx) {
-	var p = self.vue.track_list[track_idx];
-        if(p.show_file_field) {
-            p.show_file_field = false;
+    self.click_upload_btn = function(track) {
+	//var p = self.vue.track_list[track_idx];
+        if(track.show_file_field) {
+            track.show_file_field = false;
 	} else {
-            p.show_file_field = true;
+            track.show_file_field = true;
 	}
     };
 
