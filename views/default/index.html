@@ -68,33 +68,28 @@
 	<button class="btn buttons" v-on:click="click_add_track_btn()">Cancel</button>
       </div>
     </div>
-      <div id="my_track_list">
-	    <div v-for="track in track_list">
-	      <div class="my_track">
-            <div style="padding-left:30px; width=100%">
-	      <div class="display:inline-block;">
-	        <i class="fa fa-star-o" style="display:inline-block; float:left; margin-right:10px;"
-			                v-on:mouseover="star_mouseover(track)"
-					v-on:mouseout=""
-					v-on:click="fav_track(track)"></i>
+    <div id="my_track_list">
+      <div v-for="track in track_list">
+	<div class="my_track">
+          <div style="padding-left:30px; width=100%">
+	    <div class="display:inline-block;">
+	      <i class="fa fa-star-o" style="display:inline-block; float:left; margin-right:10px;"
+	                              v-on:mouseover="star_mouseover(track)"
+				      v-on:mouseout=""
+				      v-on:click="fav_track(track)"></i>
 	      </div>
 	      <div class="track_title" style="display:inline-block">${track.track_title}</div>
 	      <div style="display:inline-block; float:right; padding-right:20px;">
-<!--=======
-                <i v-on:click="fav_track(track)" class="fa fa-star-o"></i>
-	      <div class="track_title">${track.track_title}</div>
-	      <div style="position:relative; top:-15px; float:right; padding-right:20px;">
-	      >>>>>>> favs-->
 	        <button v-if="!track.need_to_upload" v-on:click="click_load_track_btn(track)" class="btn small fa fa-folder-open buttons">&nbsp;&nbsp;Load</button>
 	        <button v-if="track.need_to_upload" class="btn small fa fa-folder-open buttons" v-on:click="click_upload_btn(track)">&nbsp;&nbsp;Upload</button>
 	        <button class="btn small fa fa-remove buttons" v-on:click="delete_track(track.id)">&nbsp;&nbsp;Delete</button>
 	      </div>
 	      <div>
-          <input v-if="track.show_file_field" id="file_input" type="file" v-on:change="upload_track($event, track)" accept="file_extension">
+                <input v-if="track.show_file_field" id="file_input" type="file" v-on:change="upload_track($event, track)" accept="file_extension">
 	      </div>
 	    </div>
-      </div>
-    </div>
+          </div>
+        </div>
       <div id="horiz_bar"></div>
       
       <div class="big_text" style="margin-left:30px; margin-bottom:20px">Your favorited tracks</div>
@@ -102,28 +97,22 @@
       
       <div id="favorited_track_list">
         <div v-for="track in track_list">
-        <div v-if="track.track_is_fav === 'yes'" id="favorited_track" style="min-height:60px">
-          <div style="padding-left:10px; width=100%;">	
+          <div v-if="track.track_is_fav === 'yes'" id="favorited_track" style="min-height:60px">
+            <div style="padding-left:10px; width=100%;">	
               ${track.track_title}
-            <span style="float:right; padding-right:104px">
-              <button class="btn fa fa-folder-open buttons" v-on:click="click_load_track_btn(track)">&nbsp;&nbsp;Load</button>
-            </span>
-          </div>
-          <div style="padding-left:30px; font-size:.8em;">
-            ${track.track_author}
+              <span style="float:right; padding-right:104px">
+                <button class="btn fa fa-folder-open buttons" v-on:click="click_load_track_btn(track)">&nbsp;&nbsp;Load</button>
+              </span>
+            </div>
+            <div style="padding-left:30px; font-size:.8em;">
+              ${track.track_author}
+            </div>
           </div>
         </div>
       </div>
     </div>
-<!--<<<<<<< HEAD
-=======
-      </div>
-    
-      >>>>>> favs-->
-    </div>
-  
+  </div>
   </transition>
-</div>
 </div>
 
 <script src="{{=URL('static', 'js/default_index.js')}}"></script>
