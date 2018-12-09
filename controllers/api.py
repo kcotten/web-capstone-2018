@@ -11,18 +11,16 @@ def add_track():
 
 @auth.requires_login()
 def delete_track():
-    track_id = request.vars.track_id;
-    db(db.track.id == track_id).delete();
+    track_id = request.vars.track_id
+    db(db.track.id == track_id).delete()
     return "WE DELETED."
 
 
 def get_track_content():
     rows = db(db.track).select()
     pid = int(request.vars.track_id)
-    print(pid)
     for row in rows:
         if row.id == pid:
-            print("inside if statement")
             track_content = row.track_content
     return response.json(dict(track_content=track_content))
 
@@ -71,7 +69,6 @@ def upload_track():
     
     db.track.update_or_insert(
         (db.track.id == track_id),
-        #track_id = track_id,
         track_content = track_content
     )
     return "ok"
