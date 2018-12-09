@@ -33,10 +33,14 @@ def get_track_list():
     rows = db(db.track).select(orderby=~db.track.track_time)
     for row in rows:
         if row.track_author == auth.user.email:
+            if row.track_content == None:
+                content = ""
+            else:
+                content = "content"
             tracks_to_send = dict(
                 id=int(row.id),
                 track_title=row.track_title,
-                track_content=row.track_content,
+                track_content=content,
                 track_author=row.track_author,
             )
             print(tracks_to_send)

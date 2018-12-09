@@ -95,23 +95,22 @@ var app = function() {
     var enumerate = function(v) { /*var k=0;*/ return v.map(function(e) {e._idx = track_count++;});};
 
     self.add_track = function () {
-        //var sent_title = self.vue.track_add_title;
-        //var sent_content = self.vue.form_content;
-	    
-	//REPLACE ALL MENTION OF track_content IN HERE WITH THE FILE NAME AND/OR FILE CONTENT.
-	console.log("add_track(): " + self.vue.track_add_title);
-	self.vue.adding_track = false;
-        $.post(add_track_url, {track_title: self.vue.track_add_title, track_content: self.vue.form_content},
+	    //REPLACE ALL MENTION OF track_content IN HERE WITH THE FILE NAME AND/OR FILE CONTENT.
+	    console.log("add_track(): " + self.vue.track_add_title);
+	    self.vue.adding_track = false;
+        $.post(add_track_url, {track_title: self.vue.track_add_title,},
             function (response) {
                 //self.vue.track_add_title = "";
                 //self.vue.form_content = "";
                 var new_track = {
                     id: response.track_id,
                     track_title: self.vue.track_add_title,
-                    track_content: self.vue.form_content,
-                    track_author: self.vue.user_email, 
+                    track_content: "",
+                    track_author: self.vue.user_email,
+                    show_file_field: true,
                 };
-		self.get_tracks();
+                //self.get_tracks();
+                
                 self.vue.track_list.unshift(new_track);
                 self.process_tracks();
             });
@@ -147,7 +146,7 @@ var app = function() {
 
     self.upload_track = function(event, track_idx) {
         var track_id = self.vue.track_list[track_idx].id;
-	track.show_file_field = false;
+	    self.vue.track_list[track_idx].show_file_field = false;
         var input = event.target;
         var file = input.files[0];
         if (file) {
