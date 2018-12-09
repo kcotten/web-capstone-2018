@@ -67,7 +67,7 @@
 	<button class="btn buttons" v-on:click="add_track()">Submit</button>
 	<button class="btn buttons" v-on:click="click_add_track_btn()">Cancel</button>
       </div>
-
+    </div>
       <div id="my_track_list">
 	    <div v-for="track in track_list">
 	      <div class="my_track">
@@ -83,16 +83,15 @@
           <input v-if="track.show_file_field" id="file_input" type="file" v-on:change="upload_track($event, track)" accept="file_extension">
 	      </div>
 	    </div>
-  	  </div>
-        
-      
-
+      </div>
+    </div>
       <div id="horiz_bar"></div>
       
       <div class="big_text" style="margin-left:30px; margin-bottom:20px">Your favorited tracks</div>
       <!-- FIXME: Use a v-for here to iterate through my tracks.-->
       
       <div id="favorited_track_list">
+        <div v-for="track in track_list">
         <div v-if="track.track_is_fav === 'yes'" id="favorited_track" style="min-height:60px">
           <div style="padding-left:10px; width=100%;">	
               ${track.track_title}
@@ -105,9 +104,10 @@
           </div>
         </div>
       </div>
+      </div>
+    
     </div>
-    </div>
-  </div>
+  
   </transition>
 </div>
 </div>

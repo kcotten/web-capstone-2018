@@ -240,13 +240,11 @@ var app = function() {
         var track_id = track.id;
         var fav;
         var tfav = track.track_is_fav;
-        console.log(tfav);
         if(tfav == "yes") {
             fav = "no";
         } else {
             fav = "yes";
         }
-        console.log(fav)
         $.post(set_favorites_url, {track_id: track_id, fav: fav},
             function (response) {
                 //self.get_fav();
