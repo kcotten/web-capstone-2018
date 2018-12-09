@@ -27,4 +27,5 @@ db.define_table('track',
                 Field('track_title'),
                 Field('track_content', 'text'),
                 Field('track_time', 'datetime', default=get_current_time()),
+                Field('track_is_fav'),
                 )
