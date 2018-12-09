@@ -20,13 +20,6 @@ $(document).ready(function(e) {
           element.style.width=width;
 	});
 
-	
-	/*$("#menu_button").click(function () {
-	    console.log("CLICK!");
-            $("#menu_button").animate({
-                "right":"500"
-	    }, 500, "easeOutBounce")
-	})*/
 });
 //Anything that needs to resize itself should go in the resizeFunction.
 window.addEventListener("resize", resizeFunction);
@@ -105,8 +98,9 @@ var app = function() {
         enumerate(self.vue.track_list);
         self.vue.track_list.map(function (e) {
             Vue.set(e, 'show_file_field', false);
-	    //console.log(e.track_content === "");
 	    Vue.set(e, 'need_to_upload', (e.track_content === ""));
+	    //Not sure if I should do this. Might need to change to fit database.
+	    Vue.set(e, 'is_favorite', /*(e.favorited)*/false);
         });
     };
 
@@ -253,6 +247,10 @@ var app = function() {
 	}
     };
 
+    self.star_mouseover = function (track) {
+        console.log(track.id);
+    };
+
     self.vue = new Vue({
         el: "#vue-div",
         delimiters: ['${', '}'],
@@ -283,6 +281,7 @@ var app = function() {
 	    click_upload_btn: self.click_upload_btn,
 	    click_load_track_btn: self.click_load_track_btn,
             click_menu_btn: self.click_menu_btn,
+	    star_mouseover: self.star_mouseover,
 	    get_track_for_display: self.get_track_for_display,
 	    delete_track: self.delete_track,
         },

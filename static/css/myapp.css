@@ -15,8 +15,7 @@ body{
     width: 100%;
     display: inline-block;
     background-color:#fff2d6;
-    overflow-y: scroll;
-    overflow-x: hidden;
+    overflow: auto;
     z-index:0;
 }
 
