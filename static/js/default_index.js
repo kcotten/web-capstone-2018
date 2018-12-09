@@ -98,7 +98,7 @@ var app = function() {
         self.vue.track_list.map(function (e) {
             Vue.set(e, 'show_file_field', false);
             Vue.set(e, 'need_to_upload', (e.track_content === ""));
-            console.log(e.track_is_fav)
+	    Vue.set(e, 'is_favorited', e.track_is_fav === "yes");
         });
     };
 
@@ -261,7 +261,26 @@ var app = function() {
     };
 
     self.star_mouseover = function (track) {
-        console.log(track.id);
+	if(track.is_favorited) {
+            track.is_favorited = false;
+	} else {
+            track.is_favorited = true;
+	}
+    };
+
+    self.star_mouseout = function (track) {
+       //An issue edge case may exist where I move out before track_s_fav can be updated.
+       track.is_favorited = (track.track_is_fav === 'yes');
+    };
+
+    self.collapse_tracks_top = function () {
+        self.vue.collapse_my_tracks = !self.vue.collapse_my_tracks;
+	console.log(self.vue.collapse_my_tracks);
+    };
+
+    self.collapse_tracks_bottom = function () {
+        self.vue.collapse_fav_tracks = !self.vue.collapse_fav_tracks;
+	console.log(self.vue.collapse_fav_tracks);
     };
 
     self.vue = new Vue({
@@ -278,6 +297,8 @@ var app = function() {
 	    map_fullscreen: false,
 	    adding_track: false,
 	    track_add_title: "",
+	    collapse_my_tracks: false,
+	    collapse_fav_tracks: false,
         },
         mounted() { 
             /* Code to run when app is mounted */
@@ -295,7 +316,10 @@ var app = function() {
 	    click_upload_btn: self.click_upload_btn,
 	    click_load_track_btn: self.click_load_track_btn,
             click_menu_btn: self.click_menu_btn,
+	    collapse_tracks_top: self.collapse_tracks_top,
+	    collapse_tracks_bottom: self.collapse_tracks_bottom,
 	    star_mouseover: self.star_mouseover,
+	    star_mouseout: self.star_mouseout,
 	    get_track_for_display: self.get_track_for_display,
             delete_track: self.delete_track,
             get_fav: self.get_fav,

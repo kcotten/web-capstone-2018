@@ -56,11 +56,15 @@
     <div id="track_menu_section">
       <div id="horiz_bar"></div>
       <div style="min-height:55px">
-        <span class="big_text" style="margin-left:30px; min-height:60px;">Your tracks</span>
+	<i class="fa fa-caret-down fa-2x" style="margin-left:30px; margin-right:15px; cursor:pointer;"
+		                          v-if="!collapse_my_tracks" v-on:click="collapse_tracks_top()"></i>
+	<i class="fa fa-caret-right fa-2x" style="margin-left:30px; margin-right:22px; cursor:pointer"
+		                           v-if="collapse_my_tracks" v-on:click="collapse_tracks_top()"></i>
+        <span class="big_text" style="min-height:60px;" v-on:click="collapse_tracks_top()">Your tracks</span>
         <button class="btn fa fa-plus buttons" style="float:right; margin-right:30px;"
-		v-on:click="click_add_track_btn()" v-if="!adding_track">&nbsp;&nbsp;Add track</button>
+		v-on:click="click_add_track_btn()" v-if="!adding_track & (is_logged_in === 'true')">&nbsp;&nbsp;Add track</button>
         <button class="btn fa fa-remove buttons" style="float:right; margin-right:30px;"
-		v-on:click="click_add_track_btn()" v-if="adding_track">&nbsp;&nbsp;Cancel track add</button>
+		v-on:click="click_add_track_btn()" v-if="adding_track & (is_logged_in === 'true')">&nbsp;&nbsp;Cancel track add</button>
       </div>
       <div v-if="adding_track" style="padding-left:10%; width:80%; margin-bottom:30px">
         <input v-model="track_add_title" placeholder="Enter a track title"/>
@@ -69,13 +73,23 @@
       </div>
     </div>
     <div id="my_track_list">
+
+      <transition name="collapse1">
+      <div v-if="!collapse_my_tracks" style="overflow:hidden">
       <div v-for="track in track_list">
 	<div class="my_track">
           <div style="padding-left:30px; width=100%">
-	    <div class="display:inline-block;">
+            <div v-if="track.need_to_upload" style="display:inline-block;margin-right:20px"></div>
+	    <div class="display:inline-block;" v-if="!track.need_to_upload">
 	      <i class="fa fa-star-o" style="display:inline-block; float:left; margin-right:10px;"
+				      v-if="!track.is_favorited"
 	                              v-on:mouseover="star_mouseover(track)"
-				      v-on:mouseout=""
+				      v-on:mouseout="star_mouseover(track)"
+				      v-on:click="fav_track(track)"></i>
+	      <i class="fa fa-star"   style="display:inline-block; float:left; margin-right:10px;"
+				      v-if="track.is_favorited"
+	                              v-on:mouseover="star_mouseover(track)"
+				      v-on:mouseout="star_mouseout(track)"
 				      v-on:click="fav_track(track)"></i>
 	      </div>
 	      <div class="track_title" style="display:inline-block">${track.track_title}</div>
@@ -90,19 +104,47 @@
 	    </div>
           </div>
         </div>
+      </div>
+      </transition>
       <div id="horiz_bar"></div>
-      
-      <div class="big_text" style="margin-left:30px; margin-bottom:20px">Your favorited tracks</div>
+      <div> 
+	<i class="fa fa-caret-down fa-2x" style="margin-left:30px; margin-right:15px; cursor:pointer;"
+		                          v-if="!collapse_fav_tracks" v-on:click="collapse_tracks_bottom()"></i>
+	<i class="fa fa-caret-right fa-2x" style="margin-left:30px; margin-right:22px; cursor:pointer"
+		                           v-if="collapse_fav_tracks" v-on:click="collapse_tracks_bottom()"></i>
+      <span class="big_text" style="margin-bottom:20px">Your favorited tracks</span>
+      </div>
       <!-- FIXME: Use a v-for here to iterate through my tracks.-->
       
-      <div id="favorited_track_list">
+      <transition name="collapse2">
+      <div v-if="!collapse_fav_tracks" id="favorited_track_list">
         <div v-for="track in track_list">
-          <div v-if="track.track_is_fav === 'yes'" id="favorited_track" style="min-height:60px">
-            <div style="padding-left:10px; width=100%;">	
-              ${track.track_title}
-              <span style="float:right; padding-right:104px">
-                <button class="btn fa fa-folder-open buttons" v-on:click="click_load_track_btn(track)">&nbsp;&nbsp;Load</button>
-              </span>
+          <div v-if="track.track_is_fav === 'yes'" class="my_track" style="padding-left:30px">
+	    <div class="display:inline-block;">
+	      <i class="fa fa-star-o" style="display:inline-block; float:left; margin-right:10px;"
+				      v-if="!track.is_favorited"
+	                              v-on:mouseover="star_mouseover(track)"
+				      v-on:mouseout="star_mouseover(track)"
+				      v-on:click="fav_track(track)"></i>
+	      <i class="fa fa-star"   style="display:inline-block; float:left; margin-right:10px;"
+				      v-if="track.is_favorited"
+	                              v-on:mouseover="star_mouseover(track)"
+				      v-on:mouseout="star_mouseout(track)"
+				      v-on:click="fav_track(track)"></i>
+	    </div>
+            <div style="padding-left:10px; width=100%;">
+	      <div style="display:inline-block">
+                ${track.track_title}
+	      </div>
+
+	      <div style="display:inline-block; float:right; padding-right:20px;">
+	        <button v-if="!track.need_to_upload" v-on:click="click_load_track_btn(track)" class="btn small fa fa-folder-open buttons">&nbsp;&nbsp;Load</button>
+	        <button v-if="track.need_to_upload" class="btn small fa fa-folder-open buttons" v-on:click="click_upload_btn(track)">&nbsp;&nbsp;Upload</button>
+	        <button class="btn small fa fa-remove buttons" v-on:click="delete_track(track.id)">&nbsp;&nbsp;Delete</button>
+	      </div>
+
+
+
             </div>
             <div style="padding-left:30px; font-size:.8em;">
               ${track.track_author}
@@ -110,6 +152,7 @@
           </div>
         </div>
       </div>
+      </transition>
     </div>
   </div>
   </transition>

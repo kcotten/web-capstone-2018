@@ -83,11 +83,31 @@ body{
     opacity:0;
 }
 
+.collapse1-enter-active, .collapse1-leave-active {
+    transition:all .3s ease;
+    max-height: 100%
+}
+.collapse1-enter, .collapse1-leave-active {
+    transition:all .5s ease;
+    transform: translateX(30%);
+    opacity:0; 
+}
+
+.collapse2-enter-active, .collapse2-leave-active {
+    transition:all .3s ease;
+    max-height: 100%
+}
+.collapse2-enter, .collapse2-leave-active {
+    transition:all .5s ease;
+    transform: translateX(30%);
+    opacity:0; 
+}
+
 .my_track {
     padding-top:5px;
     border-radius:15px;
     min-height:40px;/*CHANGE BACK TO 42 LATER */
-    margin-bottom:15px;
+    margin-bottom:10px;
 }
 
 .my_track:hover {
@@ -105,9 +125,9 @@ body{
     color: black;
 }
 
-#favorited_track_list:hover {
+/*#favorited_track_list:hover {
     background-color:#ffdd9e;    
-}
+}*/
 
 .buttons {
     border-radius:10px;
