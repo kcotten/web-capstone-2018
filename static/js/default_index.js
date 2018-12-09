@@ -71,7 +71,7 @@ var app = function() {
 
     self.add_track = function () {
 	//REPLACE ALL MENTION OF track_content IN HERE WITH THE FILE NAME AND/OR FILE CONTENT.
-        console.log("add_track(): " + self.vue.track_add_title);
+    console.log("add_track(): " + self.vue.track_add_title);
 	self.vue.adding_track = false;
         $.post(add_track_url, {track_title: self.vue.track_add_title,},
             function (response) {
@@ -81,12 +81,11 @@ var app = function() {
                     id: response.track_id,
                     track_title: self.vue.track_add_title,
                     track_content: "",
-                    track_author: self.vue.user_email,
+                    track_author: user_email,
                     show_file_field: true,
+                    track_is_fav: "no",
                 };
-                show_file_field: true,
-                self.get_tracks();
-                
+                self.get_tracks();                
                 self.vue.track_list.unshift(new_track);
                 self.process_tracks();
             });
@@ -105,8 +104,9 @@ var app = function() {
         enumerate(self.vue.track_list);
         self.vue.track_list.map(function (e) {
             Vue.set(e, 'show_file_field', false);
-	    //console.log(e.track_content === "");
-	    Vue.set(e, 'need_to_upload', (e.track_content === ""));
+	        //console.log(e.track_content === "");
+            Vue.set(e, 'need_to_upload', (e.track_content === ""));
+            console.log(e.track_is_fav)
         });
     };
 
@@ -136,7 +136,7 @@ var app = function() {
                     track_content: reader.result,
                     track_id: track_id
                 });
-		track.need_to_upload = false;
+		        track.need_to_upload = false;
                 //self.get_track_for_display(track_id);
             }, false);
             // Reads the file as text. Triggers above event handler.
@@ -147,7 +147,7 @@ var app = function() {
     self.get_track_for_display = function(track_id) {
         $.getJSON(get_track_content_url, {track_id: track_id, }, 
             function(response) {
-                var gpx = response.track_content; // URL to your GPX file or the GPX itself
+                var gpx = response.track_content;
                 new L.GPX(gpx, {
                     async: true,
                     marker_options: {
@@ -170,13 +170,12 @@ var app = function() {
     };
 
     self.delete_track = function(id) {
-	var track_id = id;
-
+	    var track_id = id;
         $.post(delete_track_url, {track_id: track_id},
             function (response) {
-	        self.get_tracks();
+	            self.get_tracks();
             }
-	);
+	    );
     };
 
 
@@ -188,7 +187,7 @@ var app = function() {
             attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
             maxZoom: 18,
             id: 'mapbox.streets',
-            accessToken: 'pk.eyJ1Ijoia2NvdHRlbiIsImEiOiJjam5qOTBxczQwd3hnM3BvM2g3a3B2amZsIn0.zmWKaRsfmBEdwlU3ejmKqQ'
+            accessToken: 'pk.eyJ1Ijoia2NvdHRlbiIsImEiOiJjam5qOTBxczQwd3hnM3BvM2g3a3B2amZsIn0.zmWKaRsfmBEdwlU3ejmKqQ',
         }).addTo(this.map);
     }
     
@@ -229,13 +228,32 @@ var app = function() {
     };
 
     self.click_upload_btn = function(track) {
-	//var p = self.vue.track_list[track_idx];
+        //var p = self.vue.track_list[track_idx];
         if(track.show_file_field) {
             track.show_file_field = false;
-	} else {
+        } else {
             track.show_file_field = true;
-	}
+        }
     };
+
+    self.fav_track = function(track) {
+        var track_id = track.id;
+        var fav;
+        var tfav = track.track_is_fav;
+        console.log(tfav);
+        if(tfav == "yes") {
+            fav = "no";
+        } else {
+            fav = "yes";
+        }
+        console.log(fav)
+        $.post(set_favorites_url, {track_id: track_id, fav: fav},
+            function (response) {
+                //self.get_fav();
+                self.get_tracks();
+            }
+	    );
+    }
 
     //FIXME: When vue is working, implement this and remove above method.
     self.click_menu_btn = function () {
@@ -262,6 +280,7 @@ var app = function() {
             tileLayer: null,
             layers: [], // may not need, we can get some interactivity going with the filelayer here though
             track_list: [],
+            fav_list: [],
             track_content: null,
 	    map_fullscreen: false,
 	    adding_track: false,
@@ -279,12 +298,14 @@ var app = function() {
             edit_track: self.edit_track,
             upload_track: self.upload_track,
             get_user_email: self.get_user_email,
-	    click_add_track_btn: self.click_add_track_btn,
-	    click_upload_btn: self.click_upload_btn,
-	    click_load_track_btn: self.click_load_track_btn,
+	        click_add_track_btn: self.click_add_track_btn,
+	        click_upload_btn: self.click_upload_btn,
+	        click_load_track_btn: self.click_load_track_btn,
             click_menu_btn: self.click_menu_btn,
-	    get_track_for_display: self.get_track_for_display,
-	    delete_track: self.delete_track,
+	        get_track_for_display: self.get_track_for_display,
+            delete_track: self.delete_track,
+            get_fav: self.get_fav,
+            fav_track: self.fav_track,
         },
     });
     

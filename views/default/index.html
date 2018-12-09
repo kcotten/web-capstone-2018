@@ -6,11 +6,13 @@
   var add_track_url = "{{=URL('api', 'add_track', user_signature=True)}}";
   var edit_track_url = "{{=URL('api', 'edit_track', user_signature=True)}}";
   var get_track_list_url = "{{=URL('api', 'get_track_list')}}";
+  var get_favorites_url = "{{=URL('api', 'get_favorites')}}";
+  var set_favorites_url = "{{=URL('api', 'set_favorites')}}";
   var upload_track_url = "{{=URL('api', 'upload_track')}}";
   var get_track_content_url = "{{=URL('api', 'get_track_content')}}";
   var get_user_email_for_frontend_url = "{{=URL('api', 'get_user_email_for_frontend', user_signature=True)}}";
   var delete_track_url = "{{=URL('api', 'delete_track')}}";
-  var is_logged_in = {{='false' if auth.user is None else 'true'}};
+  var is_logged_in = "{{='false' if auth.user is None else 'true'}}";
   var user_email = "{{='false' if auth.user is None else auth.user.email}}";
   var user_name = "{{='false' if auth.user is None else auth.user.first_name}}";
 </script>
@@ -21,9 +23,6 @@
     integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA=="
     crossorigin=""></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-gpx/1.4.0/gpx.min.js"></script>
-  <script src='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js'></script>
-  <script src="{{=URL('static', 'js/leaflet.filelayer.js')}}"></script>
-  <script src="{{=URL('static', 'js/togeojson.js')}}"> </script>
 {{end}}
 
 <div id="vue-div" class="container">
@@ -70,9 +69,10 @@
       </div>
 
       <div id="my_track_list">
-	<div v-for="track in track_list">
-	  <div class="my_track">
+	    <div v-for="track in track_list">
+	      <div class="my_track">
             <div style="padding-left:30px; width=100%">
+                <i v-on:click="fav_track(track)" class="fa fa-star-o"></i>
 	      <div class="track_title">${track.track_title}</div>
 	      <div style="position:relative; top:-15px; float:right; padding-right:20px;">
 	        <button v-if="!track.need_to_upload" v-on:click="click_load_track_btn(track)" class="btn small fa fa-folder-open buttons">&nbsp;&nbsp;Load</button>
@@ -80,32 +80,32 @@
 	        <button class="btn small fa fa-remove buttons" v-on:click="delete_track(track.id)">&nbsp;&nbsp;Delete</button>
 	      </div>
 	      <div>
-                <input v-if="track.show_file_field" id="file_input" type="file" v-on:change="upload_track($event, track)" accept="file_extension">
+          <input v-if="track.show_file_field" id="file_input" type="file" v-on:change="upload_track($event, track)" accept="file_extension">
 	      </div>
 	    </div>
   	  </div>
-        </div>
-      </div>
+        
+      
 
       <div id="horiz_bar"></div>
-
+      
       <div class="big_text" style="margin-left:30px; margin-bottom:20px">Your favorited tracks</div>
       <!-- FIXME: Use a v-for here to iterate through my tracks.-->
+      
       <div id="favorited_track_list">
-	    <div id="favorited_track" style="min-height:60px">
-          <div style="padding-left:10px; width=100%;">
-  	      <i class="fa fa-star-o"></i>	
-              Track1
-	      <span style="float:right; padding-right:104px">
-	        <button class="btn fa fa-folder-open buttons">&nbsp;&nbsp;Load</button>
-	      </span>
-	  </div>
-	  <div style="padding-left:30px; font-size:.8em;">
-            Track author
-	  </div>
-	</div>
+        <div v-if="track.track_is_fav === 'yes'" id="favorited_track" style="min-height:60px">
+          <div style="padding-left:10px; width=100%;">	
+              ${track.track_title}
+            <span style="float:right; padding-right:104px">
+              <button class="btn fa fa-folder-open buttons" v-on:click="click_load_track_btn(track)">&nbsp;&nbsp;Load</button>
+            </span>
+          </div>
+          <div style="padding-left:30px; font-size:.8em;">
+            ${track.track_author}
+          </div>
+        </div>
       </div>
-      <div>
+    </div>
     </div>
   </div>
   </transition>
