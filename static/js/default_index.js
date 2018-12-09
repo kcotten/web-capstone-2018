@@ -216,11 +216,7 @@ var app = function() {
     //    
     //};
 
-    // there is a callback, but what it returns is beyond complicated. Will be easier to just upload seperately
-    // and then load into JS and display with calls to leaflet.filelayer
     self.initMap = function() {
-        // loads map into div called mapid
-        // TODO...need to configure this to be self.map
         this.map = L.map("mapid").setView([36.98, 237.98], 13);
 
         L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
@@ -229,28 +225,6 @@ var app = function() {
             id: 'mapbox.streets',
             accessToken: 'pk.eyJ1Ijoia2NvdHRlbiIsImEiOiJjam5qOTBxczQwd3hnM3BvM2g3a3B2amZsIn0.zmWKaRsfmBEdwlU3ejmKqQ'
         }).addTo(this.map);
-
-        // Add filelayer, move to filelayer init or get rid of possibly
-        var style = {color:'red', opacity: 1.0, fillOpacity: 1.0, weight: 2, clickable: false};
-        L.Control.FileLayerLoad.LABEL = '<i class="fa fa-folder-open"></i>';
-        var control = new L.Control.fileLayerLoad({
-            fitBounds: true,
-            layerOptions: {
-                style: style,
-                pointToLayer: function (data, latlng) {
-                    return L.circleMarker(latlng, {style: style});
-                }
-            },
-        }).addTo(this.map);
-
-        control.loader.on('data:loaded', function (e) {
-            const layer = e.layer;
-            console.log(e.filename);
-            console.log(layer);
-            layerswitcher.addOverlay(e.layer, e.filename);
-            // Do something here with the layer, like introspect its points.
-            // See Leaflet.js reference.
-        });
     }
     
     self.initLayers = function() {
