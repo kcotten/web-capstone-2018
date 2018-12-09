@@ -31,11 +31,12 @@
   <!-- map -->
   <div id="mapid">
     <!-- map moved to Vue -->
-    <div id="menu_button">
-      <button class="btn fa fa-ellipsis-v fa-2x" id="menu_button2"></button>
+    <div id="menu_button" v-on:click="click_menu_btn()">
+      <button class="btn fa fa-ellipsis-v fa-2x" id="menu_button2">&nbsp;&nbsp;&nbsp;</button>
     </div>
   </div>
-  <div id="menuid">
+  <transition name="fade">
+  <div v-if="!map_fullscreen" id="menuid">
     <div class="big_text" id="user_info_holder">
       <div v-if="!is_logged_in">
         <span><a href="login.html">Login</a></span>
@@ -70,7 +71,7 @@
 	  <div class="my_track">
             <div style="padding-left:30px; width=100%">
 	      <div class="track_title">${track.track_title}</div>
-	      <div style="position:relative; top=0px; float:right; padding-right:20px;">
+	      <div style="position:relative; top:-15px; float:right; padding-right:20px;">
 	        <button v-if="!track.need_to_upload" v-on:click="click_load_track_btn(track)" class="btn small fa fa-folder-open buttons">&nbsp;&nbsp;Load</button>
 	        <button v-if="track.need_to_upload" class="btn small fa fa-folder-open buttons" v-on:click="click_upload_btn(track)">&nbsp;&nbsp;Upload</button>
 	        <button class="btn small fa fa-remove buttons" v-on:click="delete_track(track.id)">&nbsp;&nbsp;Delete</button>
@@ -101,8 +102,10 @@
 	  </div>
 	</div>
       </div>
+      <div>
     </div>
   </div>
+  </transition>
 </div>
 </div>
 

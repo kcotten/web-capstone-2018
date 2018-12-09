@@ -1,8 +1,6 @@
 $(document).ready(function(e) {
 
         //Variable instantiation.
-	var map_fullscreen = false;
-
 	var menu_width = "30%";
 	var map_width = "70%";
 	
@@ -29,31 +27,6 @@ $(document).ready(function(e) {
                 "right":"500"
 	    }, 500, "easeOutBounce")
 	})*/
-
-
-        $("#menu_button").click(function(){
-	    /*$("#menu_button").transition({
-	        "right":"500"
-	    },500,"easeInOutBack")*/
-	    console.log("CLICK!");
-	    if (map_fullscreen) {
-	        $("#menuid").css({
-                    "width":menu_width
-	        })
-	        $("#mapid").css({
-                    "width":map_width
-	        })
-	        map_fullscreen = false;
-	    } else {
-	        $("#menuid").css({
-                    "width":"0%"
-	        })
-	        $("#mapid").css({
-                    "width":"100%"
-	        })
-	        map_fullscreen = true;
-	    }
-	});
 });
 //Anything that needs to resize itself should go in the resizeFunction.
 window.addEventListener("resize", resizeFunction);
@@ -97,9 +70,9 @@ var app = function() {
     var enumerate = function(v) { /*var k=0;*/ return v.map(function(e) {e._idx = track_count++;});};
 
     self.add_track = function () {
-	    //REPLACE ALL MENTION OF track_content IN HERE WITH THE FILE NAME AND/OR FILE CONTENT.
-	    console.log("add_track(): " + self.vue.track_add_title);
-	    self.vue.adding_track = false;
+	//REPLACE ALL MENTION OF track_content IN HERE WITH THE FILE NAME AND/OR FILE CONTENT.
+        console.log("add_track(): " + self.vue.track_add_title);
+	self.vue.adding_track = false;
         $.post(add_track_url, {track_title: self.vue.track_add_title,},
             function (response) {
                 //self.vue.track_add_title = "";
@@ -111,6 +84,7 @@ var app = function() {
                     track_author: self.vue.user_email,
                     show_file_field: true,
                 };
+                show_file_field: true,
                 self.get_tracks();
                 
                 self.vue.track_list.unshift(new_track);
@@ -196,25 +170,16 @@ var app = function() {
     };
 
     self.delete_track = function(id) {
-        //var track = self.vue.track_list[track_idx];
 	var track_id = id;
-	/*$.post(delete_track_url, {
-	    track_id:track_id
-	});
-        self.get_tracks();
-        self.process_tracks();*/
 
         $.post(delete_track_url, {track_id: track_id},
             function (response) {
-		        self.get_tracks();
+	        self.get_tracks();
             }
 	);
     };
 
-    //FIXME: When vue is working, implement this and remove above method.
-    //self.press_menu_button = function () {
-    //    
-    //};
+
 
     self.initMap = function() {
         this.map = L.map("mapid").setView([36.98, 237.98], 13);
@@ -272,6 +237,22 @@ var app = function() {
 	}
     };
 
+    //FIXME: When vue is working, implement this and remove above method.
+    self.click_menu_btn = function () {
+	if(self.vue.map_fullscreen) {
+            $("#mapid").css({
+                "width":"70%"
+            })
+	    self.vue.map_fullscreen = false;
+	} else {
+	    //These may be subject to change. Test values for now.
+            $("#mapid").css({
+                "width":"100%"
+            })
+	    self.vue.map_fullscreen = true;
+	}
+    };
+
     self.vue = new Vue({
         el: "#vue-div",
         delimiters: ['${', '}'],
@@ -282,12 +263,9 @@ var app = function() {
             layers: [], // may not need, we can get some interactivity going with the filelayer here though
             track_list: [],
             track_content: null,
-	        map_fullsize: false,
-	        adding_track: false,
-	        track_add_title: "",
-		show_file_field: false,
-            //user_email: "", //Having this set here would over write the value I put in index.html. Therefore I suggest removing it
-		              //    unless if for some security concern (?).
+	    map_fullscreen: false,
+	    adding_track: false,
+	    track_add_title: "",
         },
         mounted() { 
             /* Code to run when app is mounted */
@@ -304,6 +282,7 @@ var app = function() {
 	    click_add_track_btn: self.click_add_track_btn,
 	    click_upload_btn: self.click_upload_btn,
 	    click_load_track_btn: self.click_load_track_btn,
+            click_menu_btn: self.click_menu_btn,
 	    get_track_for_display: self.get_track_for_display,
 	    delete_track: self.delete_track,
         },

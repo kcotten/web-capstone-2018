@@ -7,6 +7,7 @@ body{
     width: 100%;
     display: inline-block;
     float:left;
+    z-index:1;
 }
 
 #menuid {
@@ -14,8 +15,9 @@ body{
     width: 100%;
     display: inline-block;
     background-color:#fff2d6;
-    /*overflow-y: scroll;
-    overflow-x: hidden;*/
+    overflow-y: scroll;
+    overflow-x: hidden;
+    z-index:0;
 }
 
 #menu_button {
@@ -62,6 +64,16 @@ body{
     min-height:32px;
     margin-bottom:15;
 }*/
+.fade-enter-active, .fade-leave-active {
+    transition:all .3s ease;
+    transform: translateX(10px);
+    opacity:1;
+}
+.fade-enter, .fade-leave-active {
+    transition:all .5s ease;
+    transform: translateX(30%);
+    opacity:0;
+}
 
 .my_track {
     padding-top:5px;
@@ -75,7 +87,7 @@ body{
 }
 
 .track_title {
-    position:absolute;
+    position:relative;
     max-width:200px;
 }
 
