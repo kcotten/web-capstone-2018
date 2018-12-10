@@ -2,7 +2,7 @@ $(document).ready(function(e) {
 
         //Variable instantiation.
 	var menu_width = "30%";
-	var map_width = "70%";
+	var map_width = "100%";
 	
 	var windowHeight = $(window).height();
 	var windowWidth = $(window).outerWidth(true);
@@ -27,7 +27,7 @@ function resizeFunction() {
     var windowHeight = $(window).height();
     var windowWidth = $(window).outerWidth(true);
     var menu_width = "30%";
-    var map_width = "70%";
+    var map_width = "100%";
     const track_titles = document.querySelectorAll('.track_title');
     track_titles.forEach(element => {
         var width = (.3*windowWidth)-255;
@@ -85,12 +85,25 @@ var app = function() {
     };
 
     self.get_tracks = function() {
-        $.getJSON(get_track_list_url,
+        var param = None;
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            url: get_track_list_url,
+            data: JSON.stringify(param),
+            success: function (response) {
+                self.vue.track_list = response.track_list;
+                self.process_tracks();
+            }
+        });
+
+        /* $.getJSON(get_track_list_url,
             function(response) {
                 self.vue.track_list = response.track_list;
                 self.process_tracks();
             }
-        );
+        ); */
     };   
 
     self.process_tracks = function() { 
@@ -203,6 +216,10 @@ var app = function() {
         );
     };
 
+    self.initPage = function() {
+        
+    }
+
     self.click_add_track_btn = function() {
 	//This is only for whether or not to show input fields. Does not add the track.
         if(self.vue.adding_track) {
@@ -246,26 +263,28 @@ var app = function() {
 
     //FIXME: When vue is working, implement this and remove above method.
     self.click_menu_btn = function () {
-	if(self.vue.map_fullscreen) {
+        if(self.vue.map_fullscreen) {
             $("#mapid").css({
                 "width":"70%"
             })
-	    self.vue.map_fullscreen = false;
-	} else {
-	    //These may be subject to change. Test values for now.
+            document.getElementById("menu_button").style.marginRight= "0%";
+            self.vue.map_fullscreen = false;
+        } else {
+            //These may be subject to change. Test values for now.
             $("#mapid").css({
                 "width":"100%"
             })
-	    self.vue.map_fullscreen = true;
-	}
+            document.getElementById("menu_button").style.marginRight= "-28%";
+            self.vue.map_fullscreen = true;
+        }
     };
 
     self.star_mouseover = function (track) {
-	if(track.is_favorited) {
-            track.is_favorited = false;
-	} else {
-            track.is_favorited = true;
-	}
+        if(track.is_favorited) {
+                track.is_favorited = false;
+        } else {
+                track.is_favorited = true;
+        }
     };
 
     self.star_mouseout = function (track) {
@@ -275,12 +294,12 @@ var app = function() {
 
     self.collapse_tracks_top = function () {
         self.vue.collapse_my_tracks = !self.vue.collapse_my_tracks;
-	console.log(self.vue.collapse_my_tracks);
+	    console.log(self.vue.collapse_my_tracks);
     };
 
     self.collapse_tracks_bottom = function () {
         self.vue.collapse_fav_tracks = !self.vue.collapse_fav_tracks;
-	console.log(self.vue.collapse_fav_tracks);
+	    console.log(self.vue.collapse_fav_tracks);
     };
 
     self.vue = new Vue({
@@ -290,20 +309,21 @@ var app = function() {
         data: {
             map: null,
             tileLayer: null,
-            layers: [], // may not need, we can get some interactivity going with the filelayer here though
+            layers: [],
             track_list: [],
             fav_list: [],
             track_content: null,
-	    map_fullscreen: false,
-	    adding_track: false,
-	    track_add_title: "",
-	    collapse_my_tracks: false,
-	    collapse_fav_tracks: false,
+            map_fullscreen: false,
+            adding_track: false,
+            track_add_title: "",
+            collapse_my_tracks: false,
+            collapse_fav_tracks: false,
         },
         mounted() { 
             /* Code to run when app is mounted */
             this.initMap();
             this.initLayers();
+            //this.initPage();
         },
         methods: {
             initMap: self.initMap,
@@ -312,15 +332,15 @@ var app = function() {
             edit_track: self.edit_track,
             upload_track: self.upload_track,
             get_user_email: self.get_user_email,
-	    click_add_track_btn: self.click_add_track_btn,
-	    click_upload_btn: self.click_upload_btn,
-	    click_load_track_btn: self.click_load_track_btn,
+            click_add_track_btn: self.click_add_track_btn,
+            click_upload_btn: self.click_upload_btn,
+            click_load_track_btn: self.click_load_track_btn,
             click_menu_btn: self.click_menu_btn,
-	    collapse_tracks_top: self.collapse_tracks_top,
-	    collapse_tracks_bottom: self.collapse_tracks_bottom,
-	    star_mouseover: self.star_mouseover,
-	    star_mouseout: self.star_mouseout,
-	    get_track_for_display: self.get_track_for_display,
+            collapse_tracks_top: self.collapse_tracks_top,
+            collapse_tracks_bottom: self.collapse_tracks_bottom,
+            star_mouseover: self.star_mouseover,
+            star_mouseout: self.star_mouseout,
+            get_track_for_display: self.get_track_for_display,
             delete_track: self.delete_track,
             get_fav: self.get_fav,
             fav_track: self.fav_track,
