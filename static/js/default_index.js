@@ -17,6 +17,8 @@ $(document).ready(function(e) {
 	  var width = (.3*windowWidth)-255;
           element.style.width=width;
 	});
+    
+    document.title = "GPX Trail Tracker"
 });
 
 //Anything that needs to resize itself should go in the resizeFunction.
@@ -38,7 +40,6 @@ function resizeFunction() {
         "width":map_width
     })
 }
-
 
 var app = function() {
 
