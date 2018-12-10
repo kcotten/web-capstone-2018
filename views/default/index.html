@@ -19,10 +19,10 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css"
     integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
     crossorigin=""/>
-  <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"
+<script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"
     integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA=="
     crossorigin=""></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-gpx/1.4.0/gpx.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-gpx/1.4.0/gpx.min.js"></script>
 {{end}}
 
 <div id="vue-div" class="container">
@@ -142,9 +142,6 @@
 	        <button v-if="track.need_to_upload" class="btn small fa fa-folder-open buttons" v-on:click="click_upload_btn(track)">&nbsp;&nbsp;Upload</button>
 	        <button class="btn small fa fa-remove buttons" v-on:click="delete_track(track.id)">&nbsp;&nbsp;Delete</button>
 	      </div>
-
-
-
             </div>
             <div style="padding-left:30px; font-size:.8em;">
               ${track.track_author}

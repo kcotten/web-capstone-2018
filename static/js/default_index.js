@@ -1,9 +1,7 @@
 $(document).ready(function(e) {
-
         //Variable instantiation.
 	var menu_width = "30%";
 	var map_width = "70%";
-	
 	var windowHeight = $(window).height();
 	var windowWidth = $(window).outerWidth(true);
 
@@ -19,8 +17,8 @@ $(document).ready(function(e) {
 	  var width = (.3*windowWidth)-255;
           element.style.width=width;
 	});
-
 });
+
 //Anything that needs to resize itself should go in the resizeFunction.
 window.addEventListener("resize", resizeFunction);
 function resizeFunction() {
@@ -60,16 +58,13 @@ var app = function() {
     };
 
     // Enumerates an array.
-    var enumerate = function(v) { /*var k=0;*/ return v.map(function(e) {e._idx = track_count++;});};
+    var enumerate = function(v) { track_count = 0; return v.map(function(e) {e._idx = track_count++;});};
 
     self.add_track = function () {
-	//REPLACE ALL MENTION OF track_content IN HERE WITH THE FILE NAME AND/OR FILE CONTENT.
-    console.log("add_track(): " + self.vue.track_add_title);
+        console.log("add_track(): " + self.vue.track_add_title);
 	self.vue.adding_track = false;
         $.post(add_track_url, {track_title: self.vue.track_add_title,},
             function (response) {
-                //self.vue.track_add_title = "";
-                //self.vue.form_content = "";
                 var new_track = {
                     id: response.track_id,
                     track_title: self.vue.track_add_title,
@@ -104,7 +99,6 @@ var app = function() {
 
     // TODO: place holder edit functionality
     self.edit_track = function(track_idx, track_content, track_title) {
-        //self.vue.post_list[post_idx].editing = !self.vue.post_list[post_idx].editing;
         $.post(edit_track_url, {
                 id:self.vue.track_list[track_idx].id, 
                 title: track_title
@@ -161,12 +155,11 @@ var app = function() {
     };
 
     self.delete_track = function(id) {
-	    var track_id = id;
+	var track_id = id;
         $.post(delete_track_url, {track_id: track_id},
             function (response) {
-	            self.get_tracks();
-            }
-	    );
+	        self.get_tracks();
+        });
     };
 
 
@@ -186,8 +179,6 @@ var app = function() {
         // TODO: move the filelayer here maybe        
     }
 
-    // get the user email for the front end
-	//This should not be necessary. I used a call in index.html to get user_email.
     self.get_user_email = function() {
         $.getJSON(get_user_email_for_frontend_url,
             function(response) {
@@ -219,7 +210,6 @@ var app = function() {
     };
 
     self.click_upload_btn = function(track) {
-        //var p = self.vue.track_list[track_idx];
         if(track.show_file_field) {
             track.show_file_field = false;
         } else {
@@ -244,7 +234,6 @@ var app = function() {
 	    );
     }
 
-    //FIXME: When vue is working, implement this and remove above method.
     self.click_menu_btn = function () {
 	if(self.vue.map_fullscreen) {
             $("#mapid").css({
@@ -252,7 +241,6 @@ var app = function() {
             })
 	    self.vue.map_fullscreen = false;
 	} else {
-	    //These may be subject to change. Test values for now.
             $("#mapid").css({
                 "width":"100%"
             })
@@ -269,7 +257,7 @@ var app = function() {
     };
 
     self.star_mouseout = function (track) {
-       //An issue edge case may exist where I move out before track_s_fav can be updated.
+       //An edge case issue may exist where I move out before track_s_fav can be updated.
        track.is_favorited = (track.track_is_fav === 'yes');
     };
 
@@ -328,12 +316,10 @@ var app = function() {
     });
     
     // If we are logged in can do a variety of things based on that
-    if (is_logged_in) {
-
+    if (is_logged_in === 'true') {
+      //Get tracks
+      self.get_tracks();
     }
-
-    //Get tracks
-    self.get_tracks();
 
     return self;
 };
