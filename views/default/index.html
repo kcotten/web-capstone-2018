@@ -46,6 +46,7 @@
           <a href="{{=URL('user/logout')}}">Logout</a>
         {{else:}}
           <a href="{{=URL('user/register')}}">Register</a>
+	  or
           <a href="{{=URL('user/login')}}">Login</a>              
         {{pass}}
       </div>      
@@ -72,10 +73,13 @@
 	<button class="btn buttons" v-on:click="click_add_track_btn()">Cancel</button>
       </div>
     </div>
-    <div id="my_track_list">
 
+    <div id="my_track_list">
       <transition name="collapse1">
       <div v-if="!collapse_my_tracks" style="overflow:hidden">
+      <div v-if="is_logged_in === 'false'" style="padding-left:30px; padding-right:40px;margin-bottom:20px">
+        Registered users can find their saved tracks here. You can even favorite them for quick sorting.
+      </div>
       <div v-for="track in track_list">
 	<div class="my_track">
           <div style="padding-left:30px; width=100%">
@@ -100,7 +104,6 @@
 	      </div>
 	      <div>
                 <input v-if="track.show_file_field" id="file_input" type="file" v-on:change="upload_track($event, track)" accept="file_extension">
-	      </div>
 	    </div>
           </div>
         </div>
@@ -118,7 +121,7 @@
       
       <transition name="collapse2">
       <div v-if="!collapse_fav_tracks" id="favorited_track_list">
-        <div v-for="track in track_list">
+	<div v-for="track in track_list">
           <div v-if="track.track_is_fav === 'yes'" class="my_track" style="padding-left:30px">
 	    <div class="display:inline-block;">
 	      <i class="fa fa-star-o" style="display:inline-block; float:left; margin-right:10px;"

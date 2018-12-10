@@ -138,6 +138,18 @@
 
 .buttons {
     border-radius:10px;
+    border: 2px solid #bfb499;
+    background: linear-gradient(to right, #26A69A 50%, #fff2d6 50%);
+    background-size: 200% 100%;
+    background-position: right bottom;
+    transition: all .5s ease-out;
+    color:black;
+}
+
+.buttons:hover {
+    background-position: left bottom;
+    border: 2px solid #26A69A;
+    color:white;
 }
 
 .big_text {
