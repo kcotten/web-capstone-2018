@@ -1,29 +1,36 @@
-body{
-    /* min-width:1100px; */
+.container {
+    height: 100%;
+    width: 100%;
+    position: relative;
 }
 
 #mapid {
     height: 100%;
     width: 100%;
-    display: inline-block;
-    float:left;
-    z-index:1;
+    /* display: inline-block;
+    float:left; */
+    z-index:0;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 #menuid {
     height: 100%;
     width: 100%;
-    display: inline-block;
+    /* display: inline-block; */
     background-color:#fff2d6;
-    overflow: auto;
-    z-index:0;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 10;
 }
 
 #menu_button {
-    z-index: 1000;
-    position:absolute;
-    right: 0;
-
+    z-index: 5;
+    position: fixed;
+    right: 28%;
     /*-webkit-transition: all 600ms cubic-bezier(0.165, 0.84, 0.44, 1);
     transition:         all 600ms cubic-bezier(0.165, 0.84, 0.44, 1);*/
 
@@ -36,8 +43,8 @@ body{
     background-color:#fff2d6;
     color:black;
     border-radius:10px;
-    position:relative;
-    left:30px;
+    /* position:relative;
+    left:30px; */
 }
 
 #setting_cog:hover {
