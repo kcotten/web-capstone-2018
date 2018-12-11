@@ -61,11 +61,11 @@
 		                          v-if="!collapse_my_tracks" v-on:click="collapse_tracks_top()"></i>
 	<i class="fa fa-caret-right fa-2x" style="margin-left:30px; margin-right:22px; cursor:pointer"
 		                           v-if="collapse_my_tracks" v-on:click="collapse_tracks_top()"></i>
-        <span class="big_text" style="min-height:60px;" v-on:click="collapse_tracks_top()">Your tracks</span>
+        <span class="big_text" style="min-height:60px;" v-on:click="collapse_tracks_top()">Your Tracks</span>
         <button class="btn fa fa-plus buttons" style="float:right; margin-right:30px;"
-		v-on:click="click_add_track_btn()" v-if="!adding_track & (is_logged_in === 'true')">&nbsp;&nbsp;Add track</button>
+		v-on:click="click_add_track_btn()" v-if="!adding_track & (is_logged_in === 'true')">&nbsp;&nbsp;Add Track</button>
         <button class="btn fa fa-remove buttons" style="float:right; margin-right:30px;"
-		v-on:click="click_add_track_btn()" v-if="adding_track & (is_logged_in === 'true')">&nbsp;&nbsp;Cancel track add</button>
+		v-on:click="click_add_track_btn()" v-if="adding_track & (is_logged_in === 'true')">&nbsp;&nbsp;Cancel Track Add</button>
       </div>
       <div v-if="adding_track" style="padding-left:10%; width:80%; margin-bottom:30px">
         <input v-model="track_add_title" placeholder="Enter a track title"/>
@@ -104,10 +104,10 @@
 	      </div>
 	      <div>
                 <input v-if="track.show_file_field" id="file_input" type="file" v-on:change="upload_track($event, track)" accept="file_extension">
-	    </div>
+	      </div>
+            </div>
           </div>
         </div>
-      </div>
       </div>
       </transition>
       <div id="horiz_bar"></div>
@@ -116,7 +116,7 @@
 		                          v-if="!collapse_fav_tracks" v-on:click="collapse_tracks_bottom()"></i>
 	<i class="fa fa-caret-right fa-2x" style="margin-left:30px; margin-right:22px; cursor:pointer"
 		                           v-if="collapse_fav_tracks" v-on:click="collapse_tracks_bottom()"></i>
-      <span class="big_text" style="margin-bottom:20px">Your favorited tracks</span>
+      <span class="big_text" style="margin-bottom:20px">Your Favorited Tracks</span>
       </div>
       <!-- FIXME: Use a v-for here to iterate through my tracks.-->
       
