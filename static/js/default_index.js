@@ -252,15 +252,9 @@ var app = function() {
 
     self.click_menu_btn = function () {
         if(self.vue.map_fullscreen) {
-            $("#mapid").css({
-                "width":"70%"
-            })
             document.getElementById("menu_button").style.marginRight= "0%";
             self.vue.map_fullscreen = false;
         } else {
-            $("#mapid").css({
-                "width":"100%"
-            })
             document.getElementById("menu_button").style.marginRight= "-30%";
             self.vue.map_fullscreen = true;
         }

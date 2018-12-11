@@ -140,7 +140,7 @@
     border-radius:10px;
     box-shadow: 2px 2px;
     border: 2px solid #bfb499;
-    background: linear-gradient(to right, #26A69A 50%, #fff2d6 50%);
+    background: linear-gradient(to right, #26A69A 50%, #f5da9f 50%);
     background-size: 200% 100%;
     background-position: right bottom;
     transition: background .5s ease-out, color .5s ease-out, transform 0s;

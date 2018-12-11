@@ -103,7 +103,7 @@
 	        <button class="btn small fa fa-remove buttons" v-on:click="delete_track(track.id)">&nbsp;&nbsp;Delete</button>
 	      </div>
 	      <div>
-                <input v-if="track.show_file_field" id="file_input" type="file" v-on:change="upload_track($event, track)" accept="file_extension">
+                <input v-if="track.show_file_field" id="file_input" type="file" v-on:change="upload_track($event, track)" accept=".gpx,.GPX">
 	      </div>
             </div>
           </div>
